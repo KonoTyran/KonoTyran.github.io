@@ -37,7 +37,7 @@ document.addEventListener('click', function(event) {
         text = getVowel(vowels[id]) + getConsonant(consonants[id])
     let s = glyphID+"-output";
 
-    document.getElementById(s).innerText = text
+    document.getElementById(s).innerHTML = text
 })
 
 function getVowel(vowelID) {
@@ -92,7 +92,7 @@ let reverse = {
 }
 
 const vowel_lookup = {
-    0: "",
+    0: "&nbsp;",
     1: "aɪ",
     2: "eɪ",
     3: "ʌ",
@@ -116,7 +116,7 @@ const vowel_lookup = {
 }
 
 const consonant_lookup = {
-    0: "",
+    0: "&nbsp;",
     5: "w",
     10: "dʒ",
     17: "p",
