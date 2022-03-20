@@ -28,6 +28,8 @@ document.addEventListener('click', function(event) {
         case "reverse":
             reverse[id] = (add > 0)
             break;
+        case "none":
+            return;
     }
 
     let text = getConsonant(consonants[id]) + getVowel(vowels[id])

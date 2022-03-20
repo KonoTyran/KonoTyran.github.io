@@ -72,13 +72,14 @@ h1 {
     transform: translate(.25em,1.25em);
 }
 .glyph .vowel-3{
+    height: 1em;
     transform: translate(.25em,3em);
 }
 .glyph .vowel-4{
-    transform: translate(.75em,4.25em) rotateZ(-55deg);
+    transform: translate(.75em,3.8em) rotateZ(-55deg);
 }
 .glyph .vowel-5{
-    transform: translate(2em,4.25em) rotateZ(55deg);
+    transform: translate(2em,3.8em) rotateZ(55deg);
 }
 
 .glyph .consonant.active{
@@ -94,6 +95,21 @@ h1 {
     border-radius: 1vw;
 }
 
+.glyph .midline {
+    background: var(--unselected-color);
+    /*border: #9a9a9a dashed 2px;*/
+    position: absolute;
+    width: .25em;
+    height: .8em;
+    left: 1.4em;
+    top: 1.75em;
+    border-radius: 1vw;
+}
+
+.midline.active {
+    background: var(--selected-consonant);
+}
+
 .glyph .consonant-0{
     transform: translate(1.9em,1em) rotateZ(55deg);
 }
@@ -104,21 +120,22 @@ h1 {
     transform: translate(.9em,1em) rotateZ(-55deg);
 }
 .glyph .consonant-3{
-    transform: translate(.9em,3.6em) rotateZ(55deg);
+    transform: translate(.9em,3em) rotateZ(55deg);
 }
 .glyph .consonant-4{
-    transform: translate(1.4em,4em);
+    height: 1.2em;
+    transform: translate(1.4em,3.4em);
 }
 .glyph .consonant-5{
-    transform: translate(1.9em,3.6em) rotateZ(-55deg);
+    transform: translate(1.9em,3em) rotateZ(-55deg);
 }
 .glyph .reverse {
     position: absolute;
     height: .5em;
     width: .5em;
-    left: 1.57em;
-    top: 5.4em;
-    transform: translate(-.375em);
+    left: 1.5em;
+    top: 5em;
+    transform: translate(-50%);
     border-radius: 50%;
     border: #4d4d4d solid 5px;
 }
