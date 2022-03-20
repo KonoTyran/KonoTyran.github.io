@@ -1,0 +1,138 @@
+:root {
+    --unselected-color: #4d4d4d;
+    --selected-vowel: #6495ed;
+    --selected-consonant: #daa520;
+}
+
+body{
+    background-color: #9a9a9a;
+    font-size: 2em;
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.glyph-container{
+    width: 100%;
+    border: #9a9a9a dashed 1px;
+    border-radius: .1em;
+    padding: .1em;
+}
+
+.glyph-output{
+    text-align: center;
+    height: 1em;
+}
+
+.glyph{
+    display: inline-block;
+}
+
+.bars{
+    height: 6.2em;
+    width: 3em;
+    position: relative;
+}
+
+.bars::before {
+    content: '';
+    position: absolute;
+    height: .1em;
+    border-radius: 1vw;
+    width: 100%;
+    top: 42%;
+    background: #9a9a9a;
+}
+
+.glyph .vowel{
+    background: var(--unselected-color);
+    /*border: #9a9a9a dashed 2px;*/
+    position: absolute;
+    width: .25em;
+    height: 1.35em;
+    border-radius: 1vw;
+}
+
+.glyph .vowel.active{
+    background: var(--selected-vowel);
+}
+
+.glyph .vowel-0{
+    transform: translate(2em) rotateZ(-55deg);
+}
+
+.glyph .vowel-1{
+    transform: translate(.75em) rotateZ(55deg);
+}
+
+.glyph .vowel-2{
+    transform: translate(.25em,1.25em);
+}
+.glyph .vowel-3{
+    transform: translate(.25em,3em);
+}
+.glyph .vowel-4{
+    transform: translate(.75em,4.25em) rotateZ(-55deg);
+}
+.glyph .vowel-5{
+    transform: translate(2em,4.25em) rotateZ(55deg);
+}
+
+.glyph .consonant.active{
+    background: var(--selected-consonant);
+}
+
+.glyph .consonant{
+    background: var(--unselected-color);
+    /*border: #9a9a9a dashed 2px;*/
+    position: absolute;
+    width: .25em;
+    height: 1em;
+    border-radius: 1vw;
+}
+
+.glyph .consonant-0{
+    transform: translate(1.9em,1em) rotateZ(55deg);
+}
+.glyph .consonant-1{
+    transform: translate(1.4em,.6em);
+}
+.glyph .consonant-2{
+    transform: translate(.9em,1em) rotateZ(-55deg);
+}
+.glyph .consonant-3{
+    transform: translate(.9em,3.6em) rotateZ(55deg);
+}
+.glyph .consonant-4{
+    transform: translate(1.4em,4em);
+}
+.glyph .consonant-5{
+    transform: translate(1.9em,3.6em) rotateZ(-55deg);
+}
+.glyph .reverse {
+    position: absolute;
+    height: .5em;
+    width: .5em;
+    left: 1.57em;
+    top: 5.4em;
+    transform: translate(-.375em);
+    border-radius: 50%;
+    border: #4d4d4d solid 5px;
+}
+.reverse.active {
+    border: rosybrown solid 5px;
+}
+
+
+.main-content{
+    background-color: #2d2d2d;
+    border: 2px solid #cecece;
+    color: #cecece;
+    border-radius: 4px;
+    width: 90%;
+    margin: auto;
+    padding: 1em;
+}
