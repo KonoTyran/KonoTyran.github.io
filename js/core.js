@@ -18,6 +18,16 @@ document.addEventListener('click', function(event) {
         element.classList.add("active");
     }
 
+    if(consonants[id] == null) {
+        consonants[id] = 0;
+    }
+    if(vowels[id] == null) {
+        vowels[id] = 0;
+    }
+    if(reverse[id] == null) {
+        reverse[id] = false;
+    }
+
     switch (element.dataset.type) {
         case "vowel":
             vowels[id] += add * Math.pow(2,element.dataset.line)
@@ -40,6 +50,27 @@ document.addEventListener('click', function(event) {
     document.getElementById(s).innerHTML = text
 })
 
+window.onload = function () {
+    document.getElementById('btn-add-glyph').addEventListener('click', function(event) {
+        glyph_number += 1;
+
+        document.getElementById('glyph-container').innerHTML += new_glyph.replaceAll('#', glyph_number)
+    });
+
+    document.getElementById('btn-add-space').addEventListener('click', function(event) {
+        document.getElementById('glyph-container').innerHTML += new_space;
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', function (event) {
+        consonants = {}
+        vowels = {}
+        reverse = {}
+        glyph_number = 1;
+        document.getElementById('glyph-container').innerHTML = new_glyph.replaceAll('#','1')
+    })
+}
+
+
 function getVowel(vowelID) {
     if(vowel_lookup[vowelID] == null)
         return "?"
@@ -52,47 +83,14 @@ function getConsonant(vowelID) {
     return consonant_lookup[vowelID]
 }
 
-let vowels = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0
-}
+let vowels = {}
 
-let consonants = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0
-}
+let consonants = {}
 
-let reverse = {
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-    6: false,
-    7: false,
-    8: false,
-    9: false,
-    10: false
-}
+let reverse = {}
 
 const vowel_lookup = {
-    0: "&nbsp;",
+    0: "",
     1: "aɪ",
     2: "eɪ",
     3: "ʌ",
@@ -108,7 +106,7 @@ const vowel_lookup = {
     48: "ɪ",
     51: "ɑ:",
     60: "ɛ",
-    61: "ə",
+    61: "ər",
     62: "i:",
     63: "oʊ"
 
@@ -116,7 +114,7 @@ const vowel_lookup = {
 }
 
 const consonant_lookup = {
-    0: "&nbsp;",
+    0: "",
     5: "w",
     10: "dʒ",
     17: "p",
@@ -142,3 +140,28 @@ const consonant_lookup = {
     61: "ʃ",
     63: "ŋ"
 }
+
+let glyph_number = 1;
+
+const new_space = "<div class=\"space\"> </div>";
+
+const new_glyph = "<div class=\"glyph\" id=\"glyph#\">\n" +
+    "            <div class=\"bars\">\n" +
+    "                <div class=\"vowel vowel-0\" data-type=\"vowel\" data-line=\"0\"></div>\n" +
+    "                <div class=\"vowel vowel-1\" data-type=\"vowel\" data-line=\"1\"></div>\n" +
+    "                <div class=\"vowel vowel-2\" data-type=\"vowel\" data-line=\"2\"></div>\n" +
+    "                <div class=\"vowel vowel-3\" data-type=\"vowel\" data-line=\"3\"></div>\n" +
+    "                <div class=\"vowel vowel-4\" data-type=\"vowel\" data-line=\"4\"></div>\n" +
+    "                <div class=\"vowel vowel-5\" data-type=\"vowel\" data-line=\"5\"></div>\n" +
+    "\n" +
+    "                <div class=\"consonant consonant-0\" data-type=\"consonant\" data-line=\"0\"></div>\n" +
+    "                <div class=\"consonant consonant-1\" data-type=\"consonant\" data-line=\"1\"></div>\n" +
+    "                <div class=\"consonant consonant-2\" data-type=\"consonant\" data-line=\"2\"></div>\n" +
+    "                <div class=\"consonant consonant-3\" data-type=\"consonant\" data-line=\"3\"></div>\n" +
+    "                <div class=\"consonant consonant-4\" data-type=\"consonant\" data-line=\"4\"></div>\n" +
+    "                <div class=\"consonant consonant-5\" data-type=\"consonant\" data-line=\"5\"></div>\n" +
+    "                <div class=\"midline\" data-type=\"none\"></div>\n" +
+    "                <div class=\"reverse\" data-type=\"reverse\"></div>\n" +
+    "            </div>\n" +
+    "            <div class=\"glyph-output\" id=\"glyph#-output\"></div>\n" +
+    "        </div>"

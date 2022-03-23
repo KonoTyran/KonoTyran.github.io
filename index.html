@@ -10,202 +10,37 @@
     <script type="text/javascript" src="js/core.js"></script>
 </head>
 <body>
-<div class="main-content">
-    <h1>Tunic Phoneme Translator</h1>
-    <div class="glyph-container">
-        <div class="glyph" id="glyph1">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
+    <div class="main-content">
+        <h1>Tunic Phoneme Translator</h1>
+        <div class="controls">
+            <button class="btn" id="btn-add-glyph">Add Glyph</button>
+            <button class="btn" id="btn-add-space">Add Space</button>
+            <div class="full-spacer"></div>
+            <button class="btn reset" id="btn-reset">Reset</button>
+        </div>
+        <div class="glyph-container" id="glyph-container">
+            <div class="glyph" id="glyph1">
+                <div class="bars">
+                    <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
+                    <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
+                    <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
+                    <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
+                    <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
+                    <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
 
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="reverse" data-type="reverse"></div>
+                    <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
+                    <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
+                    <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
+                    <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
+                    <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
+                    <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
+                    <div class="midline" data-type="none"></div>
+                    <div class="reverse" data-type="reverse"></div>
+                </div>
+                <div class="glyph-output" id="glyph1-output"></div>
             </div>
-            <div class="glyph-output" id="glyph1-output">&nbsp;</div>
         </div>
-        <div class="glyph" id="glyph2">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph2-output">&nbsp;</div>
-        </div>
-        <div class="glyph" id="glyph3">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph3-output">&nbsp;</div>
-        </div>
-        <div class="glyph" id="glyph4">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph4-output">&nbsp;</div>
-        </div>
-        <div class="glyph" id="glyph5">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph5-output">&nbsp;</div>
-        </div>
-        <div class="glyph" id="glyph6">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph6-output">&nbsp;</div>
-            </div>
-        <div class="glyph" id="glyph7">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph7-output">&nbsp;</div>
-        </div>
-        <div class="glyph" id="glyph8">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph8-output">&nbsp;</div>
-        </div>
-        <div class="glyph" id="glyph9">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph9-output">&nbsp;</div>
-        </div>
-        <div class="glyph" id="glyph10">
-            <div class="bars">
-                <div class="vowel vowel-0" data-type="vowel" data-line="0"></div>
-                <div class="vowel vowel-1" data-type="vowel" data-line="1"></div>
-                <div class="vowel vowel-2" data-type="vowel" data-line="2"></div>
-                <div class="vowel vowel-3" data-type="vowel" data-line="3"></div>
-                <div class="vowel vowel-4" data-type="vowel" data-line="4"></div>
-                <div class="vowel vowel-5" data-type="vowel" data-line="5"></div>
-                <div class="midline" data-type="none"></div>
-                <div class="consonant consonant-0" data-type="consonant" data-line="0"></div>
-                <div class="consonant consonant-1" data-type="consonant" data-line="1"></div>
-                <div class="consonant consonant-2" data-type="consonant" data-line="2"></div>
-                <div class="consonant consonant-3" data-type="consonant" data-line="3"></div>
-                <div class="consonant consonant-4" data-type="consonant" data-line="4"></div>
-                <div class="consonant consonant-5" data-type="consonant" data-line="5"></div>
-                <div class="reverse" data-type="reverse"></div>
-            </div>
-            <div class="glyph-output" id="glyph10-output">&nbsp;</div>
-        </div>
+        <div class="footer">by KonoTyran</div>
     </div>
-</div>
 </body>
 </html>
