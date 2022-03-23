@@ -48,17 +48,19 @@ document.addEventListener('click', function(event) {
     let s = glyphID+"-output";
 
     document.getElementById(s).innerHTML = text
+    document.getElementById('human-out').innerText = getENG()
 })
 
 window.onload = function () {
     document.getElementById('btn-add-glyph').addEventListener('click', function(event) {
         glyph_number += 1;
-
-        document.getElementById('glyph-container').innerHTML += new_glyph.replaceAll('#', glyph_number)
+        order.push(glyph_number);
+        document.getElementById('container').innerHTML += new_glyph.replaceAll('#', glyph_number)
     });
 
     document.getElementById('btn-add-space').addEventListener('click', function(event) {
-        document.getElementById('glyph-container').innerHTML += new_space;
+        document.getElementById('container').innerHTML += new_space;
+        order.push("s");
     });
 
     document.getElementById('btn-reset').addEventListener('click', function (event) {
@@ -66,8 +68,38 @@ window.onload = function () {
         vowels = {}
         reverse = {}
         glyph_number = 1;
+        order = []
+
         document.getElementById('glyph-container').innerHTML = new_glyph.replaceAll('#','1')
     })
+
+    document.getElementById('btn-speak').addEventListener('click', function (event) {
+        let speech = new SpeechSynthesisUtterance();
+
+        let outString = getENG();
+
+        speech.lang = "en-US";
+        speech.text = outString
+        speech.volume = 1;
+        speech.rate = 1;
+        speech.pitch = 1;
+
+        window.speechSynthesis.speak(speech);
+    })
+}
+
+function getENG() {
+    let text = ''
+    for( const id of order) {
+        if(id === "s")
+            text += " "
+        else if(reverse[id])
+            text += getVowelENG(vowels[id]) + getConsonantENG(consonants[id])
+        else
+            text += getConsonantENG(consonants[id]) + getVowelENG(vowels[id])
+
+    }
+    return text;
 }
 
 
@@ -83,11 +115,27 @@ function getConsonant(vowelID) {
     return consonant_lookup[vowelID]
 }
 
+function getVowelENG(vowelID) {
+    if(vowel_eng[vowelID] == null)
+        return ""
+    return vowel_eng[vowelID]
+}
+
+function getConsonantENG(consonantID) {
+    if(consonant_eng[consonantID] == null)
+        return ""
+    return consonant_eng[consonantID]
+}
+
 let vowels = {}
 
 let consonants = {}
 
 let reverse = {}
+
+let glyph_number = 1;
+
+let order = [1];
 
 const vowel_lookup = {
     0: "",
@@ -109,8 +157,27 @@ const vowel_lookup = {
     61: "ər",
     62: "i:",
     63: "oʊ"
-
-
+}
+const vowel_eng = {
+    0: "",
+    1: "i",
+    2: "ey",
+    3: "uh",
+    14: "o",
+    15: "a",
+    16: "oy",
+    28: "u",
+    31: "oo",
+    32: "ow",
+    44: "air",
+    46: "ear",
+    47: "or",
+    48: "i",
+    51: "are",
+    60: "e",
+    61: "err",
+    62: "e",
+    63: "oh"
 }
 
 const consonant_lookup = {
@@ -140,8 +207,34 @@ const consonant_lookup = {
     61: "ʃ",
     63: "ŋ"
 }
+const consonant_eng = {
+    0: "",
+    5: "w",
+    10: "j",
+    17: "p",
+    18: "l",
+    19: "r",
+    20: "ch",
+    21: "t",
+    22: "y",
+    23: "th",
+    25: "f",
+    27: "s",
+    34: "b",
+    35: "k",
+    38: "v",
+    40: "m",
+    42: "d",
+    49: "g",
+    44: "n",
+    47: "g",
+    50: "h",
+    54: "z",
+    58: "th",
+    61: "sh",
+    63: "n"
+}
 
-let glyph_number = 1;
 
 const new_space = "<div class=\"space\"> </div>";
 
