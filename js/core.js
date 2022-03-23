@@ -1,6 +1,8 @@
 document.addEventListener('click', function(event) {
     /** @type {HTMLElement} */
     let element = event.target
+    if(element.parentElement == null || element.parentElement.parentElement == null)
+        return
     let glyph = element.parentElement.parentElement
     let glyphID = glyph.getAttribute("id");
 
@@ -68,9 +70,10 @@ window.onload = function () {
         vowels = {}
         reverse = {}
         glyph_number = 1;
-        order = []
+        order = [1]
 
-        document.getElementById('glyph-container').innerHTML = new_glyph.replaceAll('#','1')
+        document.getElementById('container').innerHTML = new_glyph.replaceAll('#','1')
+        document.getElementById('human-out').innerHTML = "";
     })
 
     document.getElementById('btn-speak').addEventListener('click', function (event) {
