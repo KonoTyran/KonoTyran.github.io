@@ -11,15 +11,6 @@ document.addEventListener('click', function(event) {
 
     let id = glyphID.substring(5)
 
-    let add = 1;
-    if(element.classList.contains("active")) {
-        element.classList.remove("active");
-        add = -1;
-    }
-    else {
-        element.classList.add("active");
-    }
-
     if(consonants[id] == null) {
         consonants[id] = 0;
     }
@@ -32,17 +23,20 @@ document.addEventListener('click', function(event) {
 
     switch (element.dataset.type) {
         case "vowel":
-            vowels[id] += add * Math.pow(2,element.dataset.line)
+            vowels[id] ^= element.dataset.line
             break;
         case "consonant":
-            consonants[id] += add * Math.pow(2,element.dataset.line)
+            consonants[id] ^= element.dataset.line
             break;
         case "reverse":
-            reverse[id] = (add > 0)
+            reverse[id] = !reverse[id]
             break;
+        case "midline":
         case "none":
             return;
     }
+
+    updateGlyph(id);
 
     let text = getConsonant(consonants[id]) + getVowel(vowels[id])
     if(reverse[id])
@@ -82,6 +76,7 @@ window.onload = function () {
         let outString = getENG();
 
         speech.lang = "en-US";
+
         speech.text = outString
         speech.volume = 1;
         speech.rate = 1;
@@ -89,6 +84,30 @@ window.onload = function () {
 
         window.speechSynthesis.speak(speech);
     })
+}
+
+function updateGlyph(id) {
+    let glyph = document.getElementById("glyph"+id)
+    if(glyph == null)
+        return;
+
+    for(const bar of glyph.firstElementChild.children) {
+        if(bar.dataset.type === "vowel") {
+            bar.classList.toggle("active", vowels[id] & bar.dataset.line)
+        }
+
+        if(bar.dataset.type === "consonant") {
+            bar.classList.toggle("active", consonants[id] & bar.dataset.line)
+        }
+
+        if(bar.dataset.type === "reverse") {
+            bar.classList.toggle("active", reverse[id])
+        }
+
+        if(bar.dataset.type === "midline") {
+            bar.classList.toggle("active", (0b111 & consonants[id]) > 0 && (0b111000 & consonants[id]) > 0)
+        }
+    }
 }
 
 function getENG() {
@@ -145,42 +164,43 @@ const vowel_lookup = {
     1: "aɪ",
     2: "eɪ",
     3: "ʌ",
-    14: "ɒ",
-    15: "æ",
-    16: "ɔɪ",
-    28: "ʊ",
-    31: "u:",
-    32: "aʊ",
-    44: "eəʳ",
-    46: "ɪə",
-    47: "ɔ:",
-    48: "ɪ",
-    51: "ɑ:",
-    60: "ɛ",
-    61: "ər",
-    62: "i:",
-    63: "oʊ"
+    6: "ɒ",
+    7: "æ",
+    8: "ɔɪ",
+    12: "ʊ",
+    15: "u:",
+    16: "aʊ",
+    20: "eəʳ",
+    22: "ɜ:ʳ",
+    23: "ɔ:",
+    24: "ɪ",
+    27: "ɑ:",
+    28: "e",
+    29: "ɜ:ʳ",
+    30: "i:",
+    31: "oʊ"
+
 }
 const vowel_eng = {
     0: "",
     1: "i",
     2: "ey",
     3: "uh",
-    14: "o",
-    15: "a",
-    16: "oy",
-    28: "u",
-    31: "oo",
-    32: "ow",
-    44: "air",
-    46: "ear",
-    47: "or",
-    48: "i",
-    51: "are",
-    60: "e",
-    61: "err",
-    62: "e",
-    63: "oh"
+    6: "o",
+    7: "a",
+    8: "oy",
+    12: "e",
+    15: "oo",
+    16: "ow",
+    20: "air",
+    22: "ear",
+    23: "or",
+    24: "i",
+    27: "are",
+    28: "e",
+    29: "err",
+    30: "e",
+    31: "oh"
 }
 
 const consonant_lookup = {
@@ -235,29 +255,29 @@ const consonant_eng = {
     54: "z",
     58: "th",
     61: "sh",
-    63: "n"
+    63: "ng"
 }
 
 
 const new_space = "<div class=\"space\"> </div>";
 
-const new_glyph = "<div class=\"glyph\" id=\"glyph#\">\n" +
-    "            <div class=\"bars\">\n" +
-    "                <div class=\"vowel vowel-0\" data-type=\"vowel\" data-line=\"0\"></div>\n" +
-    "                <div class=\"vowel vowel-1\" data-type=\"vowel\" data-line=\"1\"></div>\n" +
-    "                <div class=\"vowel vowel-2\" data-type=\"vowel\" data-line=\"2\"></div>\n" +
-    "                <div class=\"vowel vowel-3\" data-type=\"vowel\" data-line=\"3\"></div>\n" +
-    "                <div class=\"vowel vowel-4\" data-type=\"vowel\" data-line=\"4\"></div>\n" +
-    "                <div class=\"vowel vowel-5\" data-type=\"vowel\" data-line=\"5\"></div>\n" +
+const new_glyph = "            <div class=\"glyph\" id=\"glyph#\">\n" +
+    "                <div class=\"bars\">\n" +
+    "                    <div class=\"vowel vowel-0\" data-type=\"vowel\" data-line=\"1\"></div>\n" +
+    "                    <div class=\"vowel vowel-1\" data-type=\"vowel\" data-line=\"2\"></div>\n" +
+    "                    <div class=\"vowel vowel-2\" data-type=\"vowel\" data-line=\"4\"></div>\n" +
+    "                    <div class=\"vowel vowel-3\" data-type=\"vowel\" data-line=\"4\"></div>\n" +
+    "                    <div class=\"vowel vowel-4\" data-type=\"vowel\" data-line=\"8\"></div>\n" +
+    "                    <div class=\"vowel vowel-5\" data-type=\"vowel\" data-line=\"16\"></div>\n" +
     "\n" +
-    "                <div class=\"consonant consonant-0\" data-type=\"consonant\" data-line=\"0\"></div>\n" +
-    "                <div class=\"consonant consonant-1\" data-type=\"consonant\" data-line=\"1\"></div>\n" +
-    "                <div class=\"consonant consonant-2\" data-type=\"consonant\" data-line=\"2\"></div>\n" +
-    "                <div class=\"consonant consonant-3\" data-type=\"consonant\" data-line=\"3\"></div>\n" +
-    "                <div class=\"consonant consonant-4\" data-type=\"consonant\" data-line=\"4\"></div>\n" +
-    "                <div class=\"consonant consonant-5\" data-type=\"consonant\" data-line=\"5\"></div>\n" +
-    "                <div class=\"midline\" data-type=\"none\"></div>\n" +
-    "                <div class=\"reverse\" data-type=\"reverse\"></div>\n" +
-    "            </div>\n" +
-    "            <div class=\"glyph-output\" id=\"glyph#-output\"></div>\n" +
-    "        </div>"
+    "                    <div class=\"consonant consonant-0\" data-type=\"consonant\" data-line=\"1\"></div>\n" +
+    "                    <div class=\"consonant consonant-1\" data-type=\"consonant\" data-line=\"2\"></div>\n" +
+    "                    <div class=\"consonant consonant-2\" data-type=\"consonant\" data-line=\"4\"></div>\n" +
+    "                    <div class=\"consonant consonant-3\" data-type=\"consonant\" data-line=\"8\"></div>\n" +
+    "                    <div class=\"consonant consonant-4\" data-type=\"consonant\" data-line=\"16\"></div>\n" +
+    "                    <div class=\"consonant consonant-5\" data-type=\"consonant\" data-line=\"32\"></div>\n" +
+    "                    <div class=\"midline\" data-type=\"midline\"></div>\n" +
+    "                    <div class=\"reverse\" data-type=\"reverse\"></div>\n" +
+    "                </div>\n" +
+    "                <div class=\"glyph-output\" id=\"glyph#-output\"></div>\n" +
+    "            </div>";
