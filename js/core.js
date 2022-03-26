@@ -1,86 +1,3 @@
-document.addEventListener('click', function(event) {
-    /** @type {HTMLElement} */
-    let element = event.target
-    if(element.parentElement == null || element.parentElement.parentElement == null)
-        return
-    let glyph = element.parentElement.parentElement
-    let glyphID = glyph.getAttribute("id");
-
-    if (glyphID == null || !glyphID.startsWith("glyph"))
-        return;
-
-    let id = glyphID.substring(5)
-
-    if(consonants[id] == null) {
-        consonants[id] = 0;
-    }
-    if(vowels[id] == null) {
-        vowels[id] = 0;
-    }
-    if(reverse[id] == null) {
-        reverse[id] = false;
-    }
-
-    switch (element.dataset.type) {
-        case "vowel":
-            vowels[id] ^= element.dataset.line
-            break;
-        case "consonant":
-            consonants[id] ^= element.dataset.line
-            break;
-        case "reverse":
-            reverse[id] = !reverse[id]
-            break;
-        case "midline":
-        case "none":
-            return;
-    }
-
-    updateGlyph(id);
-
-    let text = getConsonant(consonants[id]) + getVowel(vowels[id])
-    if(reverse[id])
-        text = getVowel(vowels[id]) + getConsonant(consonants[id])
-    let s = glyphID+"-output";
-
-    document.getElementById(s).innerHTML = text
-    document.getElementById('human-out').innerText = getENG()
-})
-
-window.onload = function () {
-    addGlyph();
-    document.getElementById('btn-add-glyph').addEventListener('click', addGlyph);
-
-    document.getElementById('btn-add-space').addEventListener('click', addSpace);
-
-    document.getElementById('btn-reset').addEventListener('click', function (event) {
-        consonants = {}
-        vowels = {}
-        reverse = {}
-        glyph_number = 0;
-        order = []
-
-        document.getElementById('container').innerHTML = "";
-        addGlyph()
-        document.getElementById('human-out').innerHTML = "";
-    })
-
-    document.getElementById('btn-speak').addEventListener('click', function (event) {
-        let speech = new SpeechSynthesisUtterance();
-
-        let outString = getENG();
-
-        speech.lang = "en-US";
-
-        speech.text = outString
-        speech.volume = 1;
-        speech.rate = 1;
-        speech.pitch = 1;
-
-        window.speechSynthesis.speak(speech);
-    })
-}
-
 function updateGlyph(id) {
     let glyph = document.getElementById("glyph"+id)
     if(glyph == null)
@@ -103,6 +20,13 @@ function updateGlyph(id) {
             bar.classList.toggle("active", (0b010 & consonants[id]) > 0 || (0b010000 & consonants[id]) > 0)
         }
     }
+
+    let text = getConsonant(consonants[id]) + getVowel(vowels[id])
+    if(reverse[id])
+        text = getVowel(vowels[id]) + getConsonant(consonants[id])
+    let s = "glyph"+id+"-output";
+
+    document.getElementById(s).innerHTML = text
 }
 
 function getENG() {
@@ -118,7 +42,6 @@ function getENG() {
     }
     return text;
 }
-
 
 function getVowel(vowelID) {
     if(vowel_lookup[vowelID] == null)
@@ -144,10 +67,17 @@ function getConsonantENG(consonantID) {
     return consonant_eng[consonantID]
 }
 
-let vowels = {}
-let consonants = {}
-let reverse = {}
-let glyph_number = 0;
+function updateAllGlyphs() {
+    for(let id of order) {
+        if(Number.isInteger(id))
+            updateGlyph(id)
+    }
+}
+
+let vowels = []
+let consonants = []
+let reverse = []
+let glyph_number = -1;
 let order = [];
 
 const vowel_lookup = {
@@ -249,8 +179,6 @@ const consonant_eng = {
     63: "ng"
 }
 
-
-const new_space = "<div class=\"space\"> </div>";
 function addSpace(event) {
     let space = document.createElement("div");
     space.classList.add("space")
@@ -261,6 +189,9 @@ function addSpace(event) {
 }
 function addGlyph(event) {
     glyph_number++;
+    consonants[glyph_number] = 0;
+    vowels[glyph_number] = 0;
+    reverse[glyph_number] = false;
     order.push(glyph_number);
     let glyph = document.createElement("div");
     glyph.classList.add("glyph")
