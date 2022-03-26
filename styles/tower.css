@@ -1,3 +1,8 @@
-.glyph .vowel, .glyph .consonant, .glyph .midline {
+.glyph .vowel, .glyph .consonant, .glyph .midline{
     background: transparent;
+}
+
+h2{
+    font-size: .8em;
+    text-align: center;
 }
