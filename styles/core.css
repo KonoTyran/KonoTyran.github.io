@@ -170,7 +170,7 @@ h1 {
     top: 1.75em;
     border-radius: 1vw;
 }
-.midline.active {
+.glyph .midline.active {
     background: var(--selected-consonant);
 }
 
