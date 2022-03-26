@@ -87,6 +87,7 @@ h1 {
     position: relative;
     flex-direction: row;
     width: 2.5em;
+    font-size: 2em;
     height: 7em;
     margin: 0;
     padding: 0;
@@ -112,13 +113,24 @@ h1 {
     z-index: 1;
 }
 
-.glyph .vowel{
+.glyph .vowel {
     background: var(--unselected-color);
     /*border: #9a9a9a dashed 2px;*/
     position: absolute;
     width: .25em;
     height: 1.35em;
     border-radius: 1vw;
+}
+
+.glyph .consonant::before,.glyph .vowel::before{
+    content:'';
+    inset: 0;
+    position: absolute;
+    width:300%;
+    /*background: rgba(255,0,0,.25);*/
+    transform: translateX(-35%);
+    border-radius: 100vw;
+    z-index: -1;
 }
 
 .glyph .vowel.active{

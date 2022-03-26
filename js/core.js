@@ -48,25 +48,20 @@ document.addEventListener('click', function(event) {
 })
 
 window.onload = function () {
-    document.getElementById('btn-add-glyph').addEventListener('click', function(event) {
-        glyph_number += 1;
-        order.push(glyph_number);
-        document.getElementById('container').innerHTML += new_glyph.replaceAll('#', glyph_number)
-    });
+    addGlyph();
+    document.getElementById('btn-add-glyph').addEventListener('click', addGlyph);
 
-    document.getElementById('btn-add-space').addEventListener('click', function(event) {
-        document.getElementById('container').innerHTML += new_space;
-        order.push("s");
-    });
+    document.getElementById('btn-add-space').addEventListener('click', addSpace);
 
     document.getElementById('btn-reset').addEventListener('click', function (event) {
         consonants = {}
         vowels = {}
         reverse = {}
-        glyph_number = 1;
-        order = [1]
+        glyph_number = 0;
+        order = []
 
-        document.getElementById('container').innerHTML = new_glyph.replaceAll('#','1')
+        document.getElementById('container').innerHTML = "";
+        addGlyph()
         document.getElementById('human-out').innerHTML = "";
     })
 
@@ -105,7 +100,7 @@ function updateGlyph(id) {
         }
 
         if(bar.dataset.type === "midline") {
-            bar.classList.toggle("active", (0b111 & consonants[id]) > 0 && (0b111000 & consonants[id]) > 0)
+            bar.classList.toggle("active", (0b010 & consonants[id]) > 0 || (0b010000 & consonants[id]) > 0)
         }
     }
 }
@@ -150,14 +145,10 @@ function getConsonantENG(consonantID) {
 }
 
 let vowels = {}
-
 let consonants = {}
-
 let reverse = {}
-
-let glyph_number = 1;
-
-let order = [1];
+let glyph_number = 0;
+let order = [];
 
 const vowel_lookup = {
     0: "",
@@ -260,24 +251,53 @@ const consonant_eng = {
 
 
 const new_space = "<div class=\"space\"> </div>";
+function addSpace(event) {
+    let space = document.createElement("div");
+    space.classList.add("space")
+    glyph_number++
+    order.push("s")
+    document.getElementById("container").appendChild(space)
 
-const new_glyph = "            <div class=\"glyph\" id=\"glyph#\">\n" +
-    "                <div class=\"bars\">\n" +
-    "                    <div class=\"vowel vowel-0\" data-type=\"vowel\" data-line=\"1\"></div>\n" +
-    "                    <div class=\"vowel vowel-1\" data-type=\"vowel\" data-line=\"2\"></div>\n" +
-    "                    <div class=\"vowel vowel-2\" data-type=\"vowel\" data-line=\"4\"></div>\n" +
-    "                    <div class=\"vowel vowel-3\" data-type=\"vowel\" data-line=\"4\"></div>\n" +
-    "                    <div class=\"vowel vowel-4\" data-type=\"vowel\" data-line=\"8\"></div>\n" +
-    "                    <div class=\"vowel vowel-5\" data-type=\"vowel\" data-line=\"16\"></div>\n" +
-    "\n" +
-    "                    <div class=\"consonant consonant-0\" data-type=\"consonant\" data-line=\"1\"></div>\n" +
-    "                    <div class=\"consonant consonant-1\" data-type=\"consonant\" data-line=\"2\"></div>\n" +
-    "                    <div class=\"consonant consonant-2\" data-type=\"consonant\" data-line=\"4\"></div>\n" +
-    "                    <div class=\"consonant consonant-3\" data-type=\"consonant\" data-line=\"8\"></div>\n" +
-    "                    <div class=\"consonant consonant-4\" data-type=\"consonant\" data-line=\"16\"></div>\n" +
-    "                    <div class=\"consonant consonant-5\" data-type=\"consonant\" data-line=\"32\"></div>\n" +
-    "                    <div class=\"midline\" data-type=\"midline\"></div>\n" +
-    "                    <div class=\"reverse\" data-type=\"reverse\"></div>\n" +
-    "                </div>\n" +
-    "                <div class=\"glyph-output\" id=\"glyph#-output\"></div>\n" +
-    "            </div>";
+}
+function addGlyph(event) {
+    glyph_number++;
+    order.push(glyph_number);
+    let glyph = document.createElement("div");
+    glyph.classList.add("glyph")
+    glyph.id = "glyph"+glyph_number;
+    let bar_container = document.createElement("div");
+    bar_container.classList.add("bars");
+    glyph.appendChild(bar_container)
+    for(let i = 0; i < 6; ++i) {
+        let n = i;
+        if(i >= 3)
+            --n;
+        let bar = document.createElement("div")
+        bar.classList.add("vowel", "vowel-"+i)
+        bar.dataset.type = "vowel";
+        bar.dataset.line = Math.pow(2,n);
+        bar_container.appendChild(bar)
+    }
+
+    for(let i = 0; i < 6; ++i) {
+        let bar = document.createElement("div")
+        bar = document.createElement("div")
+        bar.classList.add("consonant", "consonant-"+i)
+        bar.dataset.type = "consonant";
+        bar.dataset.line = Math.pow(2,i);
+        bar_container.appendChild(bar)
+    }
+    let bar = document.createElement("div")
+    bar.classList.add("midline")
+    bar.dataset.type = "midline"
+    bar_container.appendChild(bar)
+    bar = document.createElement("div")
+    bar.classList.add("reverse")
+    bar.dataset.type = "reverse"
+    bar_container.appendChild(bar)
+    let out = document.createElement("div")
+    out.classList.add("glyph-output")
+    out.id = "glyph"+glyph_number+"-output"
+    glyph.appendChild(out)
+    document.getElementById("container").appendChild(glyph)
+}
