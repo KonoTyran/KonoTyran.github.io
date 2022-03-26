@@ -63,6 +63,8 @@ function keyPress(event) {
                 position[i-1][0] += step
                 position[i-1][1] += i
                 break;
+            default:
+                return;
         }
         vowels[i-1] = vowel_rotation[(position[i-1][0]) % (vowel_rotation.length)]
         consonants[i-1] = cons_rotation[(position[i-1][1]) % (cons_rotation.length)]
