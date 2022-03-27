@@ -63,7 +63,7 @@ function keyPress(event) {
         default:
             return;
     }
-
+    event.preventDefault()
     for(let i = 1; i <= 12;++i) {
         switch (direction) {
             case "🡅":
