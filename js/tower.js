@@ -11,7 +11,7 @@ window.onload = function () {
         order = [];
         step = 0;
         sequence = "";
-        position = structuredClone(start_position)
+        position = getStartPosition()
         document.getElementById('container').innerText = "";
         for(let i = 0; i < 12; ++i) {
             addGlyph();
@@ -42,31 +42,47 @@ window.onload = function () {
 document.addEventListener('keydown', keyPress)
 
 function keyPress(event) {
+    let direction =""
+    switch (event.code) {
+        case "KeyW":
+        case "ArrowUp":
+            direction += "🡅"
+            break;
+        case "KeyS":
+        case "ArrowDown":
+            direction += "🡇"
+            break;
+        case "KeyA":
+        case "ArrowLeft":
+            direction += "🡄"
+            break;
+        case "KeyD":
+        case "ArrowRight":
+            direction += "🡆"
+            break;
+        default:
+            return;
+    }
 
     for(let i = 1; i <= 12;++i) {
-        switch (event.code) {
-            case "KeyW":
-            case "ArrowUp":
+        switch (direction) {
+            case "🡅":
                 position[i-1][0] += i
                 position[i-1][1] += i + 1
                 break;
-            case "KeyS":
-            case "ArrowDown":
+            case "🡇":
                 position[i-1][0] += i + 1
                 position[i-1][1] += step
                 break;
-            case "KeyA":
-            case "ArrowLeft":
+            case "🡄":
                 position[i-1][0] += step + i - 1
                 position[i-1][1] += step + i - 1
                 break;
-            case "KeyD":
-            case "ArrowRight":
+            case "🡆":
                 position[i-1][0] += step
                 position[i-1][1] += i
                 break;
-            default:
-                return;
+
         }
         vowels[i-1] = vowel_rotation[(position[i-1][0]) % (vowel_rotation.length)]
         consonants[i-1] = cons_rotation[(position[i-1][1]) % (cons_rotation.length)]
@@ -75,33 +91,16 @@ function keyPress(event) {
     updateAllGlyphs()
     document.getElementById("human-out").innerHTML = getENG()
 
-    switch (event.code) {
-        case "KeyW":
-        case "ArrowUp":
-            sequence += "🡅"
-            break;
-        case "KeyS":
-        case "ArrowDown":
-            sequence += "🡇"
-            break;
-        case "KeyA":
-        case "ArrowLeft":
-            sequence += "🡄"
-            break;
-        case "KeyD":
-        case "ArrowRight":
-            sequence += "🡆"
-            break;
-    }
-    document.getElementById("sequence-out").innerText = sequence
+    document.getElementById("sequence-out").innerText = (sequence += direction)
 }
-
-const start_position = [[0,0],[5,12],[6,24],[16,23],[14,23],[8,4],[12,4],[13,9],[0,5],[15,0],[3,19],[6,4]]
+function getStartPosition() {
+    return [[0,0],[5,12],[6,24],[16,23],[14,23],[8,4],[12,4],[13,9],[0,5],[15,0],[3,19],[6,4]];
+}
 const cons_rotation = [25, 20, 10, 49, 35, 42, 21, 34, 24, 63, 44, 40, 0, 18, 5, 22, 19, 50, 47, 61, 54, 27, 58, 15, 38]
 const vowel_rotation = [6, 7, 0, 20, 31, 16, 8, 1, 2, 22, 27, 23, 29, 15, 30, 3, 12, 28, 24]
 
 let step = 0;
-let position = window.structuredClone(start_position)
+let position = getStartPosition()
 let sequence = ''
 
 
