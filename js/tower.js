@@ -10,12 +10,14 @@ window.onload = function () {
         glyph_number = -1;
         order = [];
         step = 0;
+        sequence = "";
         position = structuredClone(start_position)
-        document.getElementById('container').innerHTML = "";
+        document.getElementById('container').innerText = "";
         for(let i = 0; i < 12; ++i) {
             addGlyph();
         }
-        document.getElementById('human-out').innerHTML = "";
+        document.getElementById('human-out').innerText = "";
+        document.getElementById('sequence-out').innerText = "";
     })
 
     document.getElementById('btn-speak').addEventListener('click', function (event) {
@@ -72,6 +74,26 @@ function keyPress(event) {
     step++;
     updateAllGlyphs()
     document.getElementById("human-out").innerHTML = getENG()
+
+    switch (event.code) {
+        case "KeyW":
+        case "ArrowUp":
+            sequence += "🡅"
+            break;
+        case "KeyS":
+        case "ArrowDown":
+            sequence += "🡇"
+            break;
+        case "KeyA":
+        case "ArrowLeft":
+            sequence += "🡄"
+            break;
+        case "KeyD":
+        case "ArrowRight":
+            sequence += "🡆"
+            break;
+    }
+    document.getElementById("sequence-out").innerText = sequence
 }
 
 const start_position = [[0,0],[5,12],[6,24],[16,23],[14,23],[8,4],[12,4],[13,9],[0,5],[15,0],[3,19],[6,4]]
@@ -80,5 +102,6 @@ const vowel_rotation = [6, 7, 0, 20, 31, 16, 8, 1, 2, 22, 27, 23, 29, 15, 30, 3,
 
 let step = 0;
 let position = window.structuredClone(start_position)
+let sequence = ''
 
 

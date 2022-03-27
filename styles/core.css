@@ -1,12 +1,64 @@
+*,*::before,*::after{
+    box-sizing: border-box;
+}
+
 :root {
     --unselected-color: #4d4d4d;
     --selected-vowel: #6495ed;
     --selected-consonant: #daa520;
 }
 
+.list a.active::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: white;
+}
+
+.list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.navbar-container{
+    background: rgb(53, 79, 95);
+    margin: 0;
+    font-size: .6em;
+}
+
+.list a {
+    text-decoration: none;
+    color: #aaa;
+    padding: .6em;
+    display: inline-block;
+    position: relative;
+}
+
+a{
+    text-decoration: none;
+    color: #aaa;
+    position:relative;
+}
+
+a:hover::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: white;
+}
+
 body{
     background-color: #9a9a9a;
     font-size: 2em;
+    margin: 0;
 }
 
 .footer{
@@ -29,7 +81,7 @@ h1 {
     border: 2px solid #cecece;
     color: #cecece;
     border-radius: 4px;
-    width: 100%;
+    width: calc(100% - 3rem);
     margin: 1rem auto;
     box-sizing: border-box;
     position: relative;

@@ -2,6 +2,11 @@
     background: transparent;
 }
 
+#sequence-out{
+    width: 100%;
+    overflow-wrap: anywhere;
+}
+
 h2{
     font-size: .8em;
     text-align: center;

@@ -1,3 +1,7 @@
+class glyph {
+
+}
+
 function updateGlyph(id) {
     let glyph = document.getElementById("glyph"+id)
     if(glyph == null)
