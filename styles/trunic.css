@@ -1,0 +1,47 @@
+#text-input{
+    background: #aaaaaa;
+    height: 30px;
+    display: inline-block;
+    color: #2d2d2d;
+    padding: 1em;
+    border-radius: .75em;
+    width: 500px;
+    font-weight: 600;
+    border: 3px solid transparent;
+    box-shadow:0 0 15px 4px rgba(255,255,255,0.1);
+
+}
+#text-input::placeholder{
+    color: #4d4d4d;
+}
+
+#text-input:focus{
+    outline-width: 0;
+    border: 3px solid #daa520;
+}
+
+#go{
+    background: #999999;
+    display: inline-block;
+    color: #2d2d2d;
+    padding: 0 1em;
+    border-radius: .75em;
+    width: max-content;
+    border: 2px solid black;
+    font-weight: 900;
+    text-align: justify;
+    box-shadow:0 0 15px 4px rgba(255,255,255,0.1);
+}
+
+.input{
+    display: flex;
+    gap: .5em;
+}
+
+#image-out {
+    height: 90px;
+    margin: .5em 0;
+    border: 2px black solid;
+    background: white;
+    image-rendering: crisp-edges;
+}

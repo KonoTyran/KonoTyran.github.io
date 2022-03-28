@@ -1,87 +1,228 @@
-class glyph {
+// noinspection JSBitwiseOperatorUsage
 
-}
+/**
+ * @param {number=} consonant
+ * @param {number=} vowel
+ * @param {boolean=} flipped
+ * @param {boolean=} space
+ */
+class Glyph {
+    constructor(consonant = 0, vowel = 0, flipped = false, space = false){
+        this.element = document.createElement("div");
+        this.consonant = consonant
+        this.vowel = vowel
+        this.flipped = flipped
+        this.space = space
+        this.id = (order[order.length-1] == null) ? 0 : order[order.length-1].id + 1 ;
 
-function updateGlyph(id) {
-    let glyph = document.getElementById("glyph"+id)
-    if(glyph == null)
-        return;
+        this.points = [
+            [5, 15],
+            [5, 40],
+            [5, 57],
+            [25, 5],
+            [25, 25],
+            [25, 47],
+            [25, 67],
+            [45, 15],
+            [45, 40],
+            [45, 57],
+        ]
 
-    for(const bar of glyph.firstElementChild.children) {
-        if(bar.dataset.type === "vowel") {
-            bar.classList.toggle("active", vowels[id] & bar.dataset.line)
+        this.element.id = "glyph"+this.id;
+        if(space) {
+            this.element.classList.add("space")
+            return;
+        }
+        this.element.classList.add("glyph")
+
+        let bar_container = document.createElement("div");
+        bar_container.classList.add("bars");
+        this.element.appendChild(bar_container)
+        for(let i = 0; i < 6; ++i) {
+            let n = i;
+            if(i >= 3)
+                --n;
+            let bar = document.createElement("div")
+            bar.classList.add("vowel", "vowel-"+i)
+            bar.dataset.type = "vowel";
+            bar.dataset.line = Math.pow(2,n);
+            bar_container.appendChild(bar)
         }
 
-        if(bar.dataset.type === "consonant") {
-            bar.classList.toggle("active", consonants[id] & bar.dataset.line)
+        for(let i = 0; i < 6; ++i) {
+            let bar = document.createElement("div")
+            bar = document.createElement("div")
+            bar.classList.add("consonant", "consonant-"+i)
+            bar.dataset.type = "consonant";
+            bar.dataset.line = Math.pow(2,i);
+            bar_container.appendChild(bar)
         }
+        let bar = document.createElement("div")
+        bar.classList.add("midline")
+        bar.dataset.type = "midline"
+        bar_container.appendChild(bar)
+        bar = document.createElement("div")
+        bar.classList.add("reverse")
+        bar.dataset.type = "reverse"
+        bar_container.appendChild(bar)
+        this.output = document.createElement("div")
+        this.output.classList.add("glyph-output")
+        this.output.id = "glyph"+order.length+"-output"
 
-        if(bar.dataset.type === "reverse") {
-            bar.classList.toggle("active", reverse[id])
-        }
-
-        if(bar.dataset.type === "midline") {
-            bar.classList.toggle("active", (0b010 & consonants[id]) > 0 || (0b010000 & consonants[id]) > 0)
-        }
+        this.element.appendChild(this.output)
     }
 
-    let text = getConsonant(consonants[id]) + getVowel(vowels[id])
-    if(reverse[id])
-        text = getVowel(vowels[id]) + getConsonant(consonants[id])
-    let s = "glyph"+id+"-output";
+    static newSpace() {
+        return new Glyph(0,0,false, true)
+    }
 
-    document.getElementById(s).innerHTML = text
+    getConsonant() {
+        return consonant_lookup[this.consonant] ?? "?"
+    }
+
+    getVowel() {
+        return vowel_lookup[this.vowel] ?? "?"
+    }
+
+    getVowelENG() {
+        return vowel_eng[this.vowel] ?? ""
+    }
+
+    getConsonantENG() {
+        return consonant_eng[this.consonant] ?? ""
+    }
+
+    getENG() {
+        if(this.space)
+            return " ";
+        if(this.flipped)
+            return this.getVowelENG() + this.getConsonantENG()
+        return this.getConsonantENG() + this.getVowelENG()
+    }
+
+    update() {
+        for(const bar of this.element.firstElementChild.children) {
+            if(bar.dataset.type === "vowel") {
+                bar.classList.toggle("active", this.vowel & bar.dataset.line)
+            }
+
+            if(bar.dataset.type === "consonant") {
+                bar.classList.toggle("active", this.consonant & bar.dataset.line)
+            }
+
+            if(bar.dataset.type === "reverse") {
+                bar.classList.toggle("active", this.flipped)
+            }
+
+            if(bar.dataset.type === "midline") {
+                bar.classList.toggle("active", (0b010 & this.consonant) > 0 || (0b010000 & this.consonant) > 0)
+            }
+        }
+
+        let text = this.getConsonant() + this.getVowel()
+        if(this.flipped)
+            text = this.getVowel() + this.getConsonant()
+        this.output.innerHTML = text
+    }
+
+    draw() {
+
+        let canvas = document.createElement("canvas")
+        let ctx = canvas.getContext("2d")
+        if(this.space) {
+            canvas.width = 25
+            canvas.height = 80
+            return canvas;
+        }
+
+        canvas.width = 50;
+        canvas.height = 90;
+
+        // ctx.rect(0, 0, canvas.width, canvas.height)
+        // ctx.stroke()
+
+        ctx.imageSmoothingEnabled = false;
+        ctx.lineWidth = 4
+        ctx.lineCap = "round"
+
+        if(this.vowel & 0b00001) {
+            this._stroke(ctx, 3,7)
+        }
+        if(this.vowel & 0b00010) {
+            this._stroke(ctx, 0,3)
+        }
+        if(this.vowel & 0b00100) {
+            this._stroke(ctx, 0,2)
+        }
+        if(this.vowel & 0b01000) {
+            this._stroke(ctx, 2,6)
+        }
+        if(this.vowel & 0b10000) {
+            this._stroke(ctx, 6,9)
+        }
+
+        if(this.consonant & 0b000001) {
+            this._stroke(ctx, 4,7)
+        }
+        if(this.consonant & 0b000010) {
+            this._stroke(ctx, 3,5)
+        }
+        if(this.consonant & 0b000100) {
+            this._stroke(ctx, 4,0)
+        }
+        if(this.consonant & 0b001000) {
+            this._stroke(ctx, 2,5)
+        }
+        if(this.consonant & 0b010000) {
+            this._stroke(ctx, 4,6)
+        }
+        if(this.consonant & 0b100000) {
+            this._stroke(ctx, 5,9)
+        }
+
+        ctx.lineCap = "square"
+        this._stroke(ctx,1,8)
+
+        ctx.clearRect(0,42, 60,4)
+
+
+        if (this.flipped) {
+            ctx.beginPath()
+            ctx.strokeStyle = "black"
+            ctx.lineWidth = 4
+            ctx.arc(25,72, 4, 0, 2 * Math.PI, false)
+            ctx.stroke();
+        }
+
+        return canvas;
+    }
+
+
+    _stroke(ctx, point1, point2) {
+        ctx.beginPath();
+        ctx.strokeStyle = "black"
+        ctx.moveTo(this.points[point1][0], this.points[point1][1]);
+        ctx.lineTo(this.points[point2][0], this.points[point2][1]);
+        ctx.stroke();
+        ctx.closePath()
+    }
+
 }
 
-function getENG() {
-    let text = ''
-    for( const id of order) {
-        if(id === "s")
-            text += " "
-        else if(reverse[id])
-            text += getVowelENG(vowels[id]) + getConsonantENG(consonants[id])
-        else
-            text += getConsonantENG(consonants[id]) + getVowelENG(vowels[id])
+function updateAllGlyphs() {
+    for(let glyph of order) {
+        glyph.update()
+    }
+}
 
+function getENG(){
+    let text = "";
+    for(let glyph of order) {
+        text += glyph.getENG()
     }
     return text;
 }
 
-function getVowel(vowelID) {
-    if(vowel_lookup[vowelID] == null)
-        return "?"
-    return vowel_lookup[vowelID]
-}
-
-function getConsonant(vowelID) {
-    if(consonant_lookup[vowelID] == null)
-        return "?"
-    return consonant_lookup[vowelID]
-}
-
-function getVowelENG(vowelID) {
-    if(vowel_eng[vowelID] == null)
-        return ""
-    return vowel_eng[vowelID]
-}
-
-function getConsonantENG(consonantID) {
-    if(consonant_eng[consonantID] == null)
-        return ""
-    return consonant_eng[consonantID]
-}
-
-function updateAllGlyphs() {
-    for(let id of order) {
-        if(Number.isInteger(id))
-            updateGlyph(id)
-    }
-}
-
-let vowels = []
-let consonants = []
-let reverse = []
-let glyph_number = -1;
 let order = [];
 
 const vowel_lookup = {
@@ -183,56 +324,14 @@ const consonant_eng = {
     63: "ng"
 }
 
-function addSpace(event) {
-    let space = document.createElement("div");
-    space.classList.add("space")
-    glyph_number++
-    order.push("s")
-    document.getElementById("container").appendChild(space)
+function addSpace() {
+    let glyph = Glyph.newSpace()
+    order.push(glyph)
+    document.getElementById("container").appendChild(glyph.element)
 
 }
-function addGlyph(event) {
-    glyph_number++;
-    consonants[glyph_number] = 0;
-    vowels[glyph_number] = 0;
-    reverse[glyph_number] = false;
-    order.push(glyph_number);
-    let glyph = document.createElement("div");
-    glyph.classList.add("glyph")
-    glyph.id = "glyph"+glyph_number;
-    let bar_container = document.createElement("div");
-    bar_container.classList.add("bars");
-    glyph.appendChild(bar_container)
-    for(let i = 0; i < 6; ++i) {
-        let n = i;
-        if(i >= 3)
-            --n;
-        let bar = document.createElement("div")
-        bar.classList.add("vowel", "vowel-"+i)
-        bar.dataset.type = "vowel";
-        bar.dataset.line = Math.pow(2,n);
-        bar_container.appendChild(bar)
-    }
-
-    for(let i = 0; i < 6; ++i) {
-        let bar = document.createElement("div")
-        bar = document.createElement("div")
-        bar.classList.add("consonant", "consonant-"+i)
-        bar.dataset.type = "consonant";
-        bar.dataset.line = Math.pow(2,i);
-        bar_container.appendChild(bar)
-    }
-    let bar = document.createElement("div")
-    bar.classList.add("midline")
-    bar.dataset.type = "midline"
-    bar_container.appendChild(bar)
-    bar = document.createElement("div")
-    bar.classList.add("reverse")
-    bar.dataset.type = "reverse"
-    bar_container.appendChild(bar)
-    let out = document.createElement("div")
-    out.classList.add("glyph-output")
-    out.id = "glyph"+glyph_number+"-output"
-    glyph.appendChild(out)
-    document.getElementById("container").appendChild(glyph)
+function addGlyph() {
+    let glyph = new Glyph()
+    order.push(glyph);
+    document.getElementById("container").appendChild(glyph.element)
 }

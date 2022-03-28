@@ -55,6 +55,10 @@ a:hover::after{
     background: white;
 }
 
+.hidden{
+    display: none !important;
+}
+
 body{
     background-color: #9a9a9a;
     font-size: 2em;
@@ -98,7 +102,7 @@ h1 {
     margin: auto;
 }
 
-.btn{
+.controls button{
     border-style: none;
     background: var(--unselected-color);
     color: #cecece;
@@ -108,7 +112,7 @@ h1 {
     position: relative;
     border-radius: .3em;
 }
-.btn:hover{
+.controls button:hover{
     background: #9a9a9a;
 }
 

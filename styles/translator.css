@@ -1,0 +1,12 @@
+
+#image-out {
+    height: 90px;
+    margin-top: .5em;
+    border: 2px black solid;
+    background: white;
+    image-rendering: crisp-edges;
+}
+
+.instructions {
+    font-size: .5em;
+}

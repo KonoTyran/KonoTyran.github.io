@@ -84,8 +84,8 @@ function keyPress(event) {
                 break;
 
         }
-        vowels[i-1] = vowel_rotation[(position[i-1][0]) % (vowel_rotation.length)]
-        consonants[i-1] = cons_rotation[(position[i-1][1]) % (cons_rotation.length)]
+        order[i-1].vowel = vowel_rotation[(position[i-1][0]) % (vowel_rotation.length)]
+        order[i-1].consonant = cons_rotation[(position[i-1][1]) % (cons_rotation.length)]
     }
     step++;
     updateAllGlyphs()

@@ -7,8 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tunic Phoneme Translator</title>
     <link rel="stylesheet" href="/styles/core.css">
+    <link rel="stylesheet" href="/styles/translator.css">
     <script type="text/javascript" src="/js/core.js"></script>
-    <script type="text/javascript" src="/js/index.js"></script>
+    <script type="text/javascript" src="/js/translator.js"></script>
 </head>
 <body>
 <nav class="navbar-container">
@@ -19,16 +20,22 @@
 </nav>
     <div class="main-content">
         <h1>Tunic Phoneme Translator</h1>
+        <div class="instructions">&lt;alt + click&gt; - remove glyph/space</div>
         <div class="controls">
-            <button class="btn" id="btn-add-glyph">Add Glyph</button>
-            <button class="btn" id="btn-add-space">Add Space</button>
-            <button class="btn" id="btn-speak">Speak Result</button>
+            <button id="btn-add-glyph">Add Glyph</button>
+            <button id="btn-add-space">Add Space</button>
+            <button id="btn-speak">Speak Result</button>
+            <button id="btn-generate-image">Generate Image</button>
             <div class="full-spacer"></div>
-            <button class="btn reset" id="btn-reset">Reset</button>
+            <button id="btn-reset">Reset</button>
         </div>
         <div class="glyph-container" id="container"></div>
         Human Readable:
         <div class="eng-out" id="human-out"></div>
+        <canvas id="image-out" class="hidden"></canvas>
+        <div class="controls hidden" id="image-controls">
+            <button id="btn-save-image">save image</button> <button id="btn-copy-image">copy to clipboard</button>
+        </div>
         <div class="footer">by <a href="https://github.com/KonoTyran/">KonoTyran</a></div>
     </div>
 </body>
