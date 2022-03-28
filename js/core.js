@@ -26,6 +26,7 @@ class Glyph {
             [45, 15],
             [45, 40],
             [45, 57],
+            [25, 40],
         ]
 
         this.element.id = "glyph"+this.id;
@@ -165,7 +166,7 @@ class Glyph {
             this._stroke(ctx, 4,7)
         }
         if(this.consonant & 0b000010) {
-            this._stroke(ctx, 3,5)
+            this._stroke(ctx, 3,10)
         }
         if(this.consonant & 0b000100) {
             this._stroke(ctx, 4,0)
