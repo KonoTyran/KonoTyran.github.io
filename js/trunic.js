@@ -61,28 +61,34 @@ function convertTextToTrunic() {
         "ɑ", "ɛ", "ɔ", "i", "ʃ", "ɪ", "s", "ŋ", "j", "ʒ", "u", "k", "h", "θ", "ð", "w", "v", "ɹ", "f", "ɡ", "t",
         "b", "z", "p", "m", "l", "æ", "ə", "d", "n"]
 
-    let words = document.getElementById('text-input').value.toLowerCase().split(" ")
+    let words = document.getElementById('text-input').value.toLowerCase().replace(/[^a-z0-9 ']/gi, '').replace(/\s+/g, ' ').trim().split(" ")
     lastPhrase = "glyphs_" + words.join("-")
     let errors = document.getElementById("errors")
     errors.innerHTML = "";
 
+    let errorList = []
     for (let word of words) {
         if(dict[word]) {
             if(order.length > 0) {
                 order.push(Glyph.newSpace())
             }
-            word = dict[word]
+            let pword = dict[word]
             let letters = []
-            while (word.length > 0) {
+            while (pword.length > 0) {
+                let stall = pword.length
                 for (let p of phonemes) {
-                    if (word.startsWith(p)) {
+                    if (pword.startsWith(p)) {
                         if (p !== "ɔ")
                             letters.push(p)
                         else
                             letters.push("ɑ")
-                        word = word.substring(p.length)
+                        pword = pword.substring(p.length)
                         break
                     }
+                }
+                if (pword.length === stall) {
+                    errorList.push("malformed dictionary entry in \"" + word + "\", Please report this to 'Kono Tyran#1865' on discord");
+                    break;
                 }
             }
 
@@ -111,13 +117,16 @@ function convertTextToTrunic() {
                 }
             }
         }
-        else {
-            let error = document.createElement("div")
-            error.innerText = "Unknown Word: " + word;
-            error.classList.add("error")
-            errors.append(error)
-            errors.classList.toggle('hidden', false)
+        else if (word) {
+            errorList.push("Unknown Word: " + word);
         }
+    }
+    for (let e of errorList) {
+        let error = document.createElement("div")
+        error.innerText = e
+        error.classList.add("error")
+        errors.append(error)
+        errors.classList.toggle('hidden', false)
     }
 }
 
@@ -129,7 +138,7 @@ function drawTrunic() {
         s += g.space ? 1 : 0
     let ctx = canvas.getContext("2d")
     // Stroked triangle
-    canvas.width  = 20 + order.length * 40 - s * 10;
+    canvas.width  = 20 + order.length * 40 - s * 15;
     canvas.height = 80;
     ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.fillStyle = "white"

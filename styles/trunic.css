@@ -59,7 +59,7 @@
 
 .error::before {
     content:'\f057';
-    font-family:FontAwesome;
+    font-family: FontAwesome;
     font-style:normal;
     font-weight:400;
     speak:none;
@@ -91,5 +91,6 @@
     vertical-align:middle;
     border-radius:.5em;
     border: 1px solid;
+    width: max-content;
     box-shadow:1px 1px 3px rgba(255,255,255,0.1);
 }

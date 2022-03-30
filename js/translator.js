@@ -104,7 +104,7 @@ function generateImage() {
         s += g.space ? 1 : 0
     let ctx = canvas.getContext("2d")
     // Stroked triangle
-    canvas.width  = 20 + order.length * 40 - s * 10;
+    canvas.width  = 20 + order.length * 40 - s * 15;
     canvas.height = 80;
     ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.fillStyle = "white"

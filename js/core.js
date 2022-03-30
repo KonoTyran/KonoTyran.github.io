@@ -13,7 +13,7 @@ class Glyph {
         this.vowel = vowel
         this.flipped = flipped
         this.space = space
-        this.id = (order[order.length-1] == null) ? 0 : order[order.length-1].id + 1 ;
+        this.id = (order.length === 0) ? 0 : order[order.length-1].id + 1 ;
 
         this.points = [
             [5, 15],
