@@ -50,7 +50,6 @@
 }
 
 #image-out {
-    height: 90px;
     margin: .5em 0;
     border: 2px black solid;
     background: white;
@@ -93,4 +92,32 @@
     border: 1px solid;
     width: max-content;
     box-shadow:1px 1px 3px rgba(255,255,255,0.1);
+}
+
+input[type="checkbox"] {
+    visibility: hidden;
+    height: 22px;
+    width: 22px;
+    position:relative;
+}
+
+input[type="checkbox"]::after {
+    content: '';
+    visibility: visible;
+    background: #aaaaaa;
+    height: 22px;
+    width: 22px;
+    position: absolute;
+    border-radius: 5px;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '\f00C';
+    font-family: FontAwesome;
+    font-size: 22px;
+    visibility: visible;
+    background: #aaaaaa;
+    height: 22px;
+    width: 22px;
+    position: absolute;
 }

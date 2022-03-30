@@ -26,7 +26,17 @@ class Glyph {
             [45, 15],
             [45, 40],
             [45, 57],
-            [25, 40],
+            [25, 40]
+        ]
+
+        this.cubicPoints = [
+            [5, 15],
+            [5, 35],
+            [25, 5],
+            [25, 25],
+            [25, 45],
+            [45, 15],
+            [45, 35],
         ]
 
         this.element.id = "glyph"+this.id;
@@ -130,7 +140,7 @@ class Glyph {
         this.output.innerHTML = text
     }
 
-    draw() {
+    draw(cubic = false) {
 
         let canvas = document.createElement("canvas")
         let ctx = canvas.getContext("2d")
@@ -150,65 +160,103 @@ class Glyph {
         ctx.lineWidth = 4
         ctx.lineCap = "round"
 
-        if(this.vowel & 0b00001) {
-            this._stroke(ctx, 3,7)
-        }
-        if(this.vowel & 0b00010) {
-            this._stroke(ctx, 0,3)
-        }
-        if(this.vowel & 0b00100) {
-            this._stroke(ctx, 0,2)
-        }
-        if(this.vowel & 0b01000) {
-            this._stroke(ctx, 2,6)
-        }
-        if(this.vowel & 0b10000) {
-            this._stroke(ctx, 6,9)
-        }
+        if(!cubic) {
+            if (this.vowel & 0b00001)
+                this._stroke(ctx, 3, 7, cubic)
 
-        if(this.consonant & 0b000001) {
-            this._stroke(ctx, 4,7)
-        }
-        if(this.consonant & 0b000010) {
-            this._stroke(ctx, 3,10)
-        }
-        if(this.consonant & 0b000100) {
-            this._stroke(ctx, 4,0)
-        }
-        if(this.consonant & 0b001000) {
-            this._stroke(ctx, 2,5)
-        }
-        if(this.consonant & 0b010000) {
-            this._stroke(ctx, 4,6)
-        }
-        if(this.consonant & 0b100000) {
-            this._stroke(ctx, 5,9)
-        }
+            if (this.vowel & 0b00010)
+                this._stroke(ctx, 0, 3, cubic)
 
-        ctx.lineCap = "square"
-        this._stroke(ctx,1,8)
+            if (this.vowel & 0b00100)
+                this._stroke(ctx, 0, 2, cubic)
 
-        ctx.clearRect(0,42, 60,4)
+            if (this.vowel & 0b01000)
+                this._stroke(ctx, 2, 6, cubic)
 
+            if (this.vowel & 0b10000)
+                this._stroke(ctx, 6, 9, cubic)
+
+            if (this.consonant & 0b000001)
+                this._stroke(ctx, 4, 7, cubic)
+
+            if (this.consonant & 0b000010)
+                this._stroke(ctx, 3, 10, cubic)
+
+            if (this.consonant & 0b000100)
+                this._stroke(ctx, 4, 0, cubic)
+
+            if (this.consonant & 0b001000)
+                this._stroke(ctx, 2, 5, cubic)
+
+            if (this.consonant & 0b010000)
+                this._stroke(ctx, 4, 6, cubic)
+
+            if (this.consonant & 0b100000)
+                this._stroke(ctx, 5, 9, cubic)
+
+
+            ctx.lineCap = "square"
+            this._stroke(ctx, 1, 8)
+
+            ctx.clearRect(0,42, 60,4)
+        }
+        else {
+            if (this.vowel & 0b00001)
+                this._stroke(ctx, 2, 5, cubic)
+
+            if (this.vowel & 0b00010)
+                this._stroke(ctx, 0, 2, cubic)
+
+            if (this.vowel & 0b00100)
+                this._stroke(ctx, 0, 1, cubic)
+
+            if (this.vowel & 0b01000)
+                this._stroke(ctx, 1, 4, cubic)
+
+            if (this.vowel & 0b10000)
+                this._stroke(ctx, 4, 6, cubic)
+
+            if (this.consonant & 0b000001)
+                this._stroke(ctx, 3, 5, cubic)
+
+            if (this.consonant & 0b000010)
+                this._stroke(ctx, 3, 2, cubic)
+
+            if (this.consonant & 0b000100)
+                this._stroke(ctx, 3, 0, cubic)
+
+            if (this.consonant & 0b001000)
+                this._stroke(ctx, 3, 1, cubic)
+
+            if (this.consonant & 0b010000)
+                this._stroke(ctx, 3, 4, cubic)
+
+            if (this.consonant & 0b100000)
+                this._stroke(ctx, 3, 6, cubic)
+        }
 
         if (this.flipped) {
             ctx.beginPath()
             ctx.strokeStyle = "black"
             ctx.lineWidth = 4
-            ctx.arc(25,72, 4, 0, 2 * Math.PI, false)
+            ctx.arc(25,(cubic) ? 49 :72, 4, 0, 2 * Math.PI, false)
             ctx.stroke();
         }
 
         return canvas;
     }
 
-    _stroke(ctx, point1, point2) {
+    _stroke(ctx, point1, point2, cubic) {
         ctx.beginPath();
         ctx.strokeStyle = "black"
-        ctx.moveTo(this.points[point1][0], this.points[point1][1]);
-        ctx.lineTo(this.points[point2][0], this.points[point2][1]);
+        if(!cubic) {
+            ctx.moveTo(this.points[point1][0], this.points[point1][1]);
+            ctx.lineTo(this.points[point2][0], this.points[point2][1]);
+        } else {
+            ctx.moveTo(this.cubicPoints[point1][0], this.cubicPoints[point1][1]);
+            ctx.lineTo(this.cubicPoints[point2][0], this.cubicPoints[point2][1]);
+        }
         ctx.stroke();
-        ctx.closePath()
     }
 
 }

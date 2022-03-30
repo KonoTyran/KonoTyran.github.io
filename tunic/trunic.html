@@ -21,18 +21,18 @@
 </nav>
 <div class="main-content">
     <h1>Trunic Rune Output</h1>
-    <div class="info">
+    <p class="info">
         This tool uses a phoneme dictionary. words not in the dictionary are unable to be converted. Due to pronunciation differences in the dictionary some words may not match in-game glyphs exactly. Punctuation is currently unsupported.
-    </div>
+    </p>
     <div class="input">
-        <input type="text" id="text-input"  placeholder="English Text"> <button id="go" disabled>Loading...</button>
+        <input type="text" id="text-input"  placeholder="English Text"> <button id="go" disabled>Loading...</button> <label><input id="cubic" type="checkbox"> Cubic</label>
     </div>
     <div class="hidden" id="errors"></div>
     <canvas class="hidden" id="image-out"></canvas>
     <div class="controls hidden" id="image-controls">
         <button id="btn-save-image">save image</button> <button id="btn-copy-image">copy to clipboard</button>
     </div>
-    <div class="footer">by <a href="https://github.com/KonoTyran/">KonoTyran</a></div>
+    <footer class="footer">by <a href="https://github.com/KonoTyran/">KonoTyran</a></footer>
 </div>
 </body>
 </html>
