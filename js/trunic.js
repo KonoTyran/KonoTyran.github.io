@@ -3,6 +3,11 @@ window.onload = () => {
         convertTextToTrunic()
         drawTrunic()
     });
+
+    document.getElementById('btn-save-image').addEventListener('click', saveImage)
+
+    document.getElementById('btn-copy-image').addEventListener('click', copyImage)
+
     loadJSON("/resources/dictionary.json",saveJSONDict)
     document.getElementById('text-input').addEventListener('keydown', (e) => {
         if(e.code === "Enter" || e.code === "NumpadEnter") {
@@ -10,6 +15,19 @@ window.onload = () => {
             drawTrunic()
         }
     })
+}
+
+function copyImage() {
+    document.getElementById('image-out').toBlob(blob => navigator.clipboard.write([new ClipboardItem({'image/png':blob})]))
+}
+
+function saveImage() {
+    const link = document.createElement('a')
+    const canvas = document.getElementById('image-out')
+    link.download = lastPhrase
+    link.href = canvas.toDataURL();
+    link.click()
+    link.remove()
 }
 
 function saveJSONDict(json){
@@ -44,7 +62,7 @@ function convertTextToTrunic() {
         "b", "z", "p", "m", "l", "æ", "ə", "d", "n"]
 
     let words = document.getElementById('text-input').value.toLowerCase().split(" ")
-
+    lastPhrase = "glyphs_" + words.join("-")
     let errors = document.getElementById("errors")
     errors.innerHTML = "";
 
@@ -121,6 +139,9 @@ function drawTrunic() {
         ctx.drawImage(glyph.draw(), pos, 0)
         pos += glyph.space ? 25 : 40;
     }
+    document.getElementById("image-out").classList.toggle("hidden", false)
+    document.getElementById("image-controls").classList.toggle("hidden", false)
 }
 
+let lastPhrase = ""
 let dict = {}
