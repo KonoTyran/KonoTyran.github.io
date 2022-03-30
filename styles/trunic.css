@@ -1,3 +1,5 @@
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
 #text-input{
     background: #aaaaaa;
     height: 30px;
@@ -33,9 +35,18 @@
     box-shadow:0 0 15px 4px rgba(255,255,255,0.1);
 }
 
+#go:active{
+    border: 2px solid #daa520;
+}
+
+#go:disabled {
+    background: #bc8f8f;
+}
+
 .input{
     display: flex;
     gap: .5em;
+    margin-top: .5em;
 }
 
 #image-out {
@@ -44,4 +55,41 @@
     border: 2px black solid;
     background: white;
     image-rendering: crisp-edges;
+}
+
+.error::before {
+    content:'\f057';
+    font-family:FontAwesome;
+    font-style:normal;
+    font-weight:400;
+    speak:none;
+    display:inline-block;
+    text-decoration:inherit;
+    width:1em;
+    margin-right:.2em;
+    text-align:center;
+    font-variant:normal;
+    text-transform:none;
+    line-height:1em;
+    margin-left:.2em;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale
+}
+
+.info{
+    font-size: 22px;
+    font-weight: normal;
+    margin-top: 20px;
+}
+
+.error{
+    padding:12px;
+    color: #D8000C;
+    background-color: #FFD2D2;
+    margin:10px 22px;
+    font-size: 20px;
+    vertical-align:middle;
+    border-radius:.5em;
+    border: 1px solid;
+    box-shadow:1px 1px 3px rgba(255,255,255,0.1);
 }

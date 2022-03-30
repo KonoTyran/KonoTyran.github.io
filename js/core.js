@@ -101,6 +101,10 @@ class Glyph {
         return this.getConsonantENG() + this.getVowelENG()
     }
 
+    static createFromRaw(rawNumber, flipped = false) {
+        return new Glyph(rawNumber >> 5, rawNumber & ~(0b111111 << 5), flipped)
+    }
+
     update() {
         for(const bar of this.element.firstElementChild.children) {
             if(bar.dataset.type === "vowel") {
@@ -197,7 +201,6 @@ class Glyph {
 
         return canvas;
     }
-
 
     _stroke(ctx, point1, point2) {
         ctx.beginPath();
@@ -323,6 +326,58 @@ const consonant_eng = {
     58: "th",
     61: "sh",
     63: "ng"
+}
+
+// noinspection NonAsciiCharacters,JSNonASCIINames
+const phoneme_to_glyph= {
+        "aɪ": 0b00001,
+        "ʌ":  0b00011,
+        "ə":  0b00011,
+        "æ":  0b00111,
+        "u":  0b01111,
+        "oʊ": 0b11111,
+        "ɔɹ": 0b10111,
+        "ɑɹ": 0b11011,
+        "əɹ": 0b11101,
+        "eɪ": 0b00010,
+        "ɑ":  0b00110,
+        "ɔ":  0b00110,
+        "i":  0b11110,
+        "iɹ": 0b10110,
+        "ɪɹ": 0b10110,
+        "ʊ":  0b01100,
+        "ɛ":  0b11100,
+        "ɛɹ": 0b10100,
+        "ɔɪ": 0b01000,
+        "oɪ": 0b01000,
+        "ɔi": 0b01000,
+        "oi": 0b01000,
+        "ɪ":  0b11000,
+        "aʊ": 0b10000,
+        "ŋ":  0b111111 << 5,
+        "θ":  0b010111 << 5,
+        "j":  0b010110 << 5,
+        "z":  0b110110 << 5,
+        "v":  0b100110 << 5,
+        "w":  0b000101 << 5,
+        "ʃ":  0b111101 << 5,
+        "ʒ":  0b101111 << 5,
+        "t":  0b010101 << 5,
+        "n":  0b101100 << 5,
+        "t͡ʃ":0b010100 << 5,
+        "d":  0b101010 << 5,
+        "h":  0b110010 << 5,
+        "b":  0b100010 << 5,
+        "s":  0b011011 << 5,
+        "ɹ":  0b010011 << 5,
+        "k":  0b100011 << 5,
+        "d͡ʒ":0b001010 << 5,
+        "ð":  0b111010 << 5,
+        "l":  0b010010 << 5,
+        "f":  0b011001 << 5,
+        "p":  0b010001 << 5,
+        "ɡ":  0b110001 << 5,
+        "m":  0b101000 << 5
 }
 
 function addSpace() {
