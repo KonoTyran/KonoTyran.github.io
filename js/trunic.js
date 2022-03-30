@@ -54,25 +54,30 @@ function loadJSON(file, callback) {
 function convertTextToTrunic() {
     order = [];
     let vow = ["ɔ", "æ", "ɑ", "ə", "ɪ", "ɛ", "ʊ", "ʌ", "i", "u", "əɹ", "ɔɹ", "ɑɹ", "iɹ", "eɪ", "aɪ", "ɔɪ", "aʊ", "oʊ", "ɛɹ",
-        "oɪ", "ɔi", "oi", "ɪɹ"]
-    let con = ["m", "n", "ŋ", "p", "b", "t", "d", "k", "ɡ", "d͡ʒ", "t͡ʃ", "f", "v", "θ", "ð", "s", "z", "ʃ", "ʒ", "h", "ɹ", "j",
+        "oɪ", "ɔi", "oi", "ɪɹ", "ɜ:ʳ", "ɑ:", "i:", "u:"]
+    let con = ["m", "n", "ŋ", "p", "b", "t", "d", "k", "ɡ", "d͡ʒ", "dʒ", "t͡ʃ", "tʃ", "f", "v", "θ", "ð", "s", "z", "ʃ", "ʒ", "h", "ɹ", "j",
         "w", "l"]
-    let phonemes = ["d͡ʒ", "t͡ʃ", "aɪ", "oɪ", "ɔi", "oi", "oʊ", "ɔɹ", "ɑɹ", "əɹ", "ɪɹ", "eɪ", "iɹ", "ʊ", "ɛɹ", "ɔɪ", "aʊ", "ʌ",
-        "ɑ", "ɛ", "ɔ", "i", "ʃ", "ɪ", "s", "ŋ", "j", "ʒ", "u", "k", "h", "θ", "ð", "w", "v", "ɹ", "f", "ɡ", "t",
+    let phonemes = ["d͡ʒ", "t͡ʃ", "ɜ:ʳ", "tʃ", "dʒ", "aɪ", "oɪ", "ɔi", "oi", "oʊ", "ɔɹ", "ɑɹ", "əɹ", "ɪɹ", "eɪ", "iɹ", "ʊ", "ɛɹ", "ɔɪ", "aʊ",
+        "ɑ:", "i:", "u:", "ʌ", "ɑ", "ɛ", "ɔ", "i", "ʃ", "ɪ", "s", "ŋ", "j", "ʒ", "u", "k", "h", "θ", "ð", "w", "v", "ɹ", "f", "ɡ", "t",
         "b", "z", "p", "m", "l", "æ", "ə", "d", "n"]
 
-    let words = document.getElementById('text-input').value.toLowerCase().replace(/[^a-z0-9 ']/gi, '').replace(/\s+/g, ' ').trim().split(" ")
+    let words = document.getElementById('text-input').value.toLowerCase().replace(/\s+/g, ' ').trim().split(" ")
     lastPhrase = "glyphs_" + words.join("-")
     let errors = document.getElementById("errors")
     errors.innerHTML = "";
 
     let errorList = []
     for (let word of words) {
-        if(dict[word]) {
+        if((word.startsWith("[") && word.endsWith("]")) || dict[word]) {
             if(order.length > 0) {
                 order.push(Glyph.newSpace())
             }
-            let pword = dict[word]
+            let pword = ''
+            if(!word.startsWith("["))
+                pword = dict[word]
+            else
+                pword = word.slice(1,-1)
+
             let letters = []
             while (pword.length > 0) {
                 let stall = pword.length
@@ -87,7 +92,7 @@ function convertTextToTrunic() {
                     }
                 }
                 if (pword.length === stall) {
-                    errorList.push("malformed dictionary entry in \"" + word + "\", Please report this to 'Kono Tyran#1865' on discord");
+                    errorList.push("unknown phoneme ["+ pword + "] in \"" + word + "\".");
                     break;
                 }
             }
