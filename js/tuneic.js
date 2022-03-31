@@ -216,6 +216,6 @@ function beep(duration, frequency, volume, type, callback) {
     let stopTime = audioCtx.currentTime + ((duration || 500) / 1000)
     oscillator.start(audioCtx.currentTime);
     oscillator.stop(stopTime);
-    gainNode.gain.setTargetAtTime(0, stopTime - 0.1, .1);
+    gainNode.gain.setTargetAtTime(0, stopTime - 0.25, .25);
 
 };
