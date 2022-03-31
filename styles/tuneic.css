@@ -1,0 +1,81 @@
+.scale {
+    display: grid;
+    grid-template-rows: repeat(25, 1fr);
+    width: 30px;
+}
+
+.note {
+    border: 1px solid #3A3B40;
+    background: #45474C;
+    color: gray;
+    height: 25px;
+    width: 30px;
+    margin: 0;
+    padding: 2px;
+    font-size: 16px;
+    position: relative;
+}
+.note:nth-child(12n+1) {
+    border-bottom: 3px solid #3A3B40;
+}
+.note:hover::after , .note.active::after{
+    content: attr(data-note);
+    position: absolute;
+    inset: 0;
+    border-radius: 5px;
+    background: #03A9F4;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.note:hover::after{
+    background: #76c5ee;
+}
+
+#note-container{
+    min-width: 400px;
+    width: calc(100% - 50px);
+    overflow-y: auto;
+    display: flex;
+    scroll-behavior: smooth;
+}
+
+#note-container::-webkit-scrollbar {
+    height: 10px;
+    border-radius: 100vw;
+}
+#note-container::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+#note-container::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+    border-radius: 100vw;
+}
+#note-container > div:nth-child(5n) {
+    border-right: 2px solid #3A3B40;
+    box-sizing: content-box;
+}
+
+.key.sharp{
+    background: black;
+    color: white;
+}
+
+.key {
+    display: flex;
+    font-size: 16px;
+    height: 25px;
+    width: 50px;
+    background: white;
+    border-top: 1px solid #3A3B40;
+    color: black;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    padding-right: 2px;
+    align-items: center;
+    justify-content: right;
+}

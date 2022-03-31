@@ -75,12 +75,6 @@
     -moz-osx-font-smoothing:grayscale
 }
 
-.info{
-    font-size: 22px;
-    font-weight: normal;
-    margin-top: 20px;
-}
-
 .error{
     padding:12px;
     color: #D8000C;

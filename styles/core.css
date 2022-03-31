@@ -8,6 +8,12 @@
     --selected-consonant: #daa520;
 }
 
+.info{
+    font-size: 22px;
+    font-weight: normal;
+    margin-top: 20px;
+}
+
 .list a.active::after{
     content: '';
     position: absolute;

@@ -339,9 +339,9 @@ const consonant_lookup = {
     38: "v",
     40: "m",
     42: "d",
-    49: "g",
     44: "n",
     47: "ʒ",
+    49: "g",
     50: "h",
     54: "z",
     58: "ð",
@@ -445,4 +445,26 @@ function addGlyph() {
     let glyph = new Glyph()
     order.push(glyph);
     document.getElementById("container").appendChild(glyph.element)
+}
+
+function generateImage() {
+    document.getElementById("image-controls").classList.toggle('hidden', false)
+    const canvas = document.getElementById("image-out")
+    canvas.classList.toggle("hidden", false)
+
+    let s = 0;
+    for(let g of order)
+        s += g.space ? 1 : 0
+    let ctx = canvas.getContext("2d")
+    // Stroked triangle
+    canvas.width  = 20 + order.length * 40 - s * 15;
+    canvas.height = 80;
+    ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillStyle = "white"
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let pos = 5;
+    for(let glyph of order) {
+        ctx.drawImage(glyph.draw(), pos, 0)
+        pos += glyph.space ? 25 : 40;
+    }
 }

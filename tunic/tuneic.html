@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=4.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tunic Phoneme Translator</title>
+    <link rel="stylesheet" href="/styles/core.css">
+    <link rel="stylesheet" href="/styles/tuneic.css">
+    <script type="text/javascript" src="/js/core.js"></script>
+    <script type="text/javascript" src="/js/tuneic.js"></script>
+</head>
+<body>
+<nav class="navbar-container">
+    <ul class="list">
+        <li><a href="/tunic/index.html">Translator</a></li>
+        <li><a href="/tunic/tower.html">Tower</a></li>
+        <li><a href="/tunic/trunic.html">Trunic</a></li>
+        <li><a href="/tunic/tuneic.html" class="active">Tuneic</a></li>
+    </ul>
+</nav>
+<main class="main-content">
+    <header>
+        <h1>Tuneic Musical Translator (WIP)</h1>
+        <ul class="info">
+            <li>left click: add/move note</li>
+            <li>right click: remove note</li>
+        </ul>
+    </header>
+    <div class="controls">
+        <button id="btn-add-note">Add 5 Notes</button>
+    </div>
+    <div class="glyph-container" id="container">
+        <div class="piano">
+            <div class="key">C</div>
+            <div class="key">B</div>
+            <div class="key sharp">A#</div>
+            <div class="key">A</div>
+            <div class="key sharp">G#</div>
+            <div class="key">G</div>
+            <div class="key sharp">F#</div>
+            <div class="key">F</div>
+            <div class="key">E</div>
+            <div class="key sharp">D#</div>
+            <div class="key">D</div>
+            <div class="key sharp">C#</div>
+            <div class="key">C</div>
+            <div class="key">B</div>
+            <div class="key sharp">A#</div>
+            <div class="key">A</div>
+            <div class="key sharp">G#</div>
+            <div class="key">G</div>
+            <div class="key sharp">F#</div>
+            <div class="key">F</div>
+            <div class="key">E</div>
+            <div class="key sharp">D#</div>
+            <div class="key">D</div>
+            <div class="key sharp">C#</div>
+            <div class="key">C</div>
+            <div class="key">B</div>
+            <div class="key sharp">A#</div>
+            <div class="key">A</div>
+            <div class="key sharp">G#</div>
+            <div class="key">G</div>
+            <div class="key sharp">F#</div>
+            <div class="key">F</div>
+            <div class="key">E</div>
+            <div class="key sharp">D#</div>
+            <div class="key">D</div>
+            <div class="key sharp">C#</div>
+            <div class="key">C</div>
+        </div>
+        <div id="note-container"></div>
+    </div>
+    <canvas id="image-out"></canvas>
+    <div class="controls" id="image-controls">
+        <button id="btn-save-image">save image</button> <button id="btn-copy-image">copy to clipboard</button>
+    </div>
+    <footer class="footer">by <a href="https://github.com/KonoTyran/">KonoTyran</a></footer>
+</main>
+</body>
+</html>
