@@ -26,50 +26,17 @@
         <ul class="info">
             <li>left click: add/move note</li>
             <li>right click: remove note</li>
+            <li>middle click: play note</li>
         </ul>
     </header>
     <div class="controls">
         <button id="btn-add-note">Add 5 Notes</button>
+        <div class="full-spacer"></div>
+        <label for="volume">Volume: <input type="range" id="volume" name="volume"
+               min="0" max="1" value=".2" step=".01"></label>
     </div>
     <div class="glyph-container" id="container">
-        <div class="piano">
-            <div class="key">C</div>
-            <div class="key">B</div>
-            <div class="key sharp">A#</div>
-            <div class="key">A</div>
-            <div class="key sharp">G#</div>
-            <div class="key">G</div>
-            <div class="key sharp">F#</div>
-            <div class="key">F</div>
-            <div class="key">E</div>
-            <div class="key sharp">D#</div>
-            <div class="key">D</div>
-            <div class="key sharp">C#</div>
-            <div class="key">C</div>
-            <div class="key">B</div>
-            <div class="key sharp">A#</div>
-            <div class="key">A</div>
-            <div class="key sharp">G#</div>
-            <div class="key">G</div>
-            <div class="key sharp">F#</div>
-            <div class="key">F</div>
-            <div class="key">E</div>
-            <div class="key sharp">D#</div>
-            <div class="key">D</div>
-            <div class="key sharp">C#</div>
-            <div class="key">C</div>
-            <div class="key">B</div>
-            <div class="key sharp">A#</div>
-            <div class="key">A</div>
-            <div class="key sharp">G#</div>
-            <div class="key">G</div>
-            <div class="key sharp">F#</div>
-            <div class="key">F</div>
-            <div class="key">E</div>
-            <div class="key sharp">D#</div>
-            <div class="key">D</div>
-            <div class="key sharp">C#</div>
-            <div class="key">C</div>
+        <div class="piano" id="piano">
         </div>
         <div id="note-container"></div>
     </div>

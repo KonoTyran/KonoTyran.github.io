@@ -30,37 +30,52 @@ class Note {
                 note.note = -1;
                 event.target.classList.remove('active');
             }
-        } else {
+        } else if (event.which === 1) {
             for (let child of note.element.children) {
                 child.classList.toggle('active', false)
             }
             event.target.classList.add('active');
             uiGrid[note.element.id.substring(4)].note = event.target.dataset.noteID
+        } else if (event.which === 2) {
+            playNote(event.target.dataset.noteID)
         }
+
+
         event.preventDefault()
         parseSequence()
     }
 }
 
 window.onload = function () {
+    let piano = document.getElementById('piano')
+    for(let i = 0; i < 37; ++i) {
+        let key = document.createElement("div")
+        key.classList.add("key")
+        if(sharp[(i + Note.musicScaleR.length-1) % 12]) {
+            key.classList.add("sharp")
+        }
+        key.dataset.note = Note.musicScaleR[(i + Note.musicScaleR.length-1) % 12]
+        key.innerText = Note.musicScaleR[(i + Note.musicScaleR.length-1) % 12]
+        key.dataset.noteID = 36-i
+        key.addEventListener('mousedown', playNote)
+        key.addEventListener('contextmenu', (e) => {e.preventDefault()})
+        piano.appendChild(key)
+    }
+
     for(let i = 0; i <= 7; i++) {
         addNote()
     }
     document.getElementById('btn-add-note').addEventListener('click', addNote);
-
-    document.getElementById('btn-parse-sequence').addEventListener('click', parseSequence);
-
-    // document.getElementById('note-container').addEventListener("wheel", function (e) {
-    //     let noteContainer= document.getElementById('note-container')
-    //     if (e.deltaY > 0) noteContainer.scrollLeft += 100;
-    //     else noteContainer.scrollLeft -= 100;
-    //     e.preventDefault()
-    // });
 }
+
+function playNote(note) {
+    let freq = 130.81 * Math.pow(2,note/12)
+    beep(500,freq, document.getElementById('volume').value)
+}
+
 
 //C C# D D# E F F# G G# A A# B
 let uiGrid = []
-
 function addNote() {
     for (let i = 0; i < 5; ++i) {
         let note = new Note()
@@ -68,8 +83,6 @@ function addNote() {
         document.getElementById("note-container").appendChild(note.element)
     }
 }
-
-
 
 let sequence = []
 function parseSequence() {
@@ -90,13 +103,13 @@ function parseSequence() {
 }
 
 //add one to these notes to shift sharps upwards.
-const unSharp = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]
+const sharp = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]
 function convertSequence() {
     for (let run of sequence) {
             run.forEach((value, index) => {
                 let i = run.length - index - 1
                 run[i] -= run[0]
-                run[i] += unSharp[run[i] % 12]
+                run[i] += sharp[run[i] % 12]
             })
         }
 
@@ -178,3 +191,31 @@ function isDescending(array) {
         return index === 0 || value < array[index-1];
     })
 }
+
+//if you have another AudioContext class use that one, as some browsers have a limit
+let audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
+
+//All arguments are optional:
+
+//duration of the tone in milliseconds. Default is 500
+//frequency of the tone in hertz. default is 440
+//volume of the tone. Default is 1, off is 0.
+//type of tone. Possible values are sine, square, sawtooth, triangle, and custom. Default is sine.
+//callback to use on end of tone
+function beep(duration, frequency, volume, type, callback) {
+    let oscillator = audioCtx.createOscillator();
+    let gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    if (volume){gainNode.gain.value = volume;}
+    if (frequency){oscillator.frequency.value = frequency;}
+    if (type){oscillator.type = type;}
+    if (callback){oscillator.onended = callback;}
+    let stopTime = audioCtx.currentTime + ((duration || 500) / 1000)
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(stopTime);
+    gainNode.gain.setTargetAtTime(0, stopTime - 0.1, .1);
+
+};

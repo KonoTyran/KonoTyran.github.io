@@ -78,4 +78,6 @@
     padding-right: 2px;
     align-items: center;
     justify-content: right;
+    cursor: pointer;
+    user-select: none;
 }
