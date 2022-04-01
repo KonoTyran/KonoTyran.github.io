@@ -53,10 +53,9 @@ window.onload = function () {
     for(let i = 0; i < 37; ++i) {
         let key = document.createElement("div")
         key.classList.add("key")
-        if(sharp[(i + Note.musicScaleR.length-1) % 12]) {
-            key.classList.add("sharp")
-        }
         key.innerText = Note.musicScaleR[(i + Note.musicScaleR.length-1) % 12]
+        if (key.innerText.endsWith("#"))
+            key.classList.add("sharp")
         key.dataset.noteID = 36-i
         key.addEventListener('mousedown', (ev => {
             ev.preventDefault()
