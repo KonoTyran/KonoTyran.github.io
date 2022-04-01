@@ -221,13 +221,18 @@ function mapTrunic(run, flip) {
 }
 
 function outputGlyph() {
-    let out = document.getElementById('phoneme-output')
-    out.innerText = '';
+    let engOut = document.getElementById('eng-out')
+    let phoOut = document.getElementById('phonetic-out')
+    engOut.innerText = '';
+    phoOut.innerText = '';
     let text = ""
+    let pho = ""
     for (let glyph of order) {
-        text += glyph.getPhonemes() + " "
+        text += glyph.getENG() + " "
+        pho += glyph.getPhonemes() + " "
     }
-    out.innerText = text;
+    engOut.innerText = text;
+    phoOut.innerText = pho;
 }
 
 function isAscending(array) {
