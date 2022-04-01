@@ -111,6 +111,14 @@ class Glyph {
         return this.getConsonantENG() + this.getVowelENG()
     }
 
+    getPhonemes() {
+        if(this.space)
+            return " ";
+        if(this.flipped)
+            return this.getVowel() + this.getConsonant()
+        return this.getConsonant() + this.getVowel()
+    }
+
     static createFromRaw(rawNumber, flipped = false) {
         return new Glyph(rawNumber >> 5, rawNumber & ~(0b111111 << 5), flipped)
     }

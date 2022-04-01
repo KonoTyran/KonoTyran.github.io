@@ -31,6 +31,7 @@
     </header>
     <div class="controls">
         <button id="btn-add-note">Add 5 Notes</button>
+        <button id="btn-make-url">Perm Link</button>
         <div class="full-spacer"></div>
         <label for="volume">Volume: <input type="range" id="volume" name="volume"
                min="0" max="1" value=".2" step=".01"></label>
@@ -40,6 +41,9 @@
         </div>
         <div id="note-container"></div>
     </div>
+    <p class="info">
+        <output id="phoneme-output"></output>
+    </p>
     <canvas id="image-out"></canvas>
     <div class="controls" id="image-controls">
         <button id="btn-save-image">save image</button> <button id="btn-copy-image">copy to clipboard</button>

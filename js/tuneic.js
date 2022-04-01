@@ -5,19 +5,21 @@ class Note {
     constructor(note = -1){
         this.element = document.createElement("div");
         this.id = (uiGrid.length === 0) ? 0 : uiGrid[uiGrid.length-1].id + 1 ;
-        this.note = note;
+        this.note = isNaN(note) ? -1 : note;
 
         this.element.id = "note"+this.id;
         this.element.classList.add("scale")
 
         for(let i = 0; i < 37; ++i) {
-            let note = document.createElement("div")
-            note.classList.add("note")
-            note.dataset.note = Note.musicScaleR[(i + Note.musicScaleR.length-1) % 12]
-            note.dataset.noteID = 36-i
-            note.addEventListener('mousedown', this.selectNote)
-            note.addEventListener('contextmenu', (e) => {e.preventDefault()})
-            this.element.appendChild(note)
+            let noteElement = document.createElement("div")
+            noteElement.classList.add("note")
+            if(note === 36-i)
+                noteElement.classList.add("active")
+            noteElement.dataset.note = Note.musicScaleR[(i + Note.musicScaleR.length-1) % 12]
+            noteElement.dataset.noteID = 36-i
+            noteElement.addEventListener('mousedown', this.selectNote)
+            noteElement.addEventListener('contextmenu', (e) => {e.preventDefault()})
+            this.element.appendChild(noteElement)
         }
     }
 
@@ -35,7 +37,7 @@ class Note {
                 child.classList.toggle('active', false)
             }
             event.target.classList.add('active');
-            uiGrid[note.element.id.substring(4)].note = event.target.dataset.noteID
+            uiGrid[note.element.id.substring(4)].note = parseInt(event.target.dataset.noteID)
         } else if (event.which === 2) {
             playNote(event.target.dataset.noteID)
         }
@@ -54,18 +56,32 @@ window.onload = function () {
         if(sharp[(i + Note.musicScaleR.length-1) % 12]) {
             key.classList.add("sharp")
         }
-        key.dataset.note = Note.musicScaleR[(i + Note.musicScaleR.length-1) % 12]
         key.innerText = Note.musicScaleR[(i + Note.musicScaleR.length-1) % 12]
         key.dataset.noteID = 36-i
-        key.addEventListener('mousedown', playNote)
+        key.addEventListener('mousedown', (ev => {
+            ev.preventDefault()
+            playNote(ev.target.dataset.noteID)
+        }))
         key.addEventListener('contextmenu', (e) => {e.preventDefault()})
         piano.appendChild(key)
     }
 
-    for(let i = 0; i <= 7; i++) {
-        addNote()
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString)
+    if(urlParams.has("s")) {
+        let s = atob(urlParams.get("s"));
+        for (let noteID of s.split(";")) {
+            addNote(parseInt(noteID));
+        }
+        parseSequence()
+    } else {
+        for (let i = 0; i <= 7; i++) {
+            add5Notes()
+        }
     }
-    document.getElementById('btn-add-note').addEventListener('click', addNote);
+    document.getElementById('btn-add-note').addEventListener('click', add5Notes);
+
+    document.getElementById('btn-make-url').addEventListener('click', makeURL);
 }
 
 function playNote(note) {
@@ -76,12 +92,24 @@ function playNote(note) {
 
 //C C# D D# E F F# G G# A A# B
 let uiGrid = []
-function addNote() {
-    for (let i = 0; i < 5; ++i) {
-        let note = new Note()
-        uiGrid.push(note);
-        document.getElementById("note-container").appendChild(note.element)
+function add5Notes() {
+    for (let i = 0; i <5; i++) {
+        addNote()
     }
+}
+
+function addNote(noteID) {
+    let note = new Note(noteID)
+    uiGrid.push(note);
+    document.getElementById("note-container").appendChild(note.element)
+}
+
+function makeURL() {
+    let url = new URL(window.location.origin + window.location.pathname)
+    url.searchParams.set('s', btoa(uiGrid.map((note => {
+        return (note.note === -1) ? "" : note.note;
+    })).join(";")))
+    window.location.href = url;
 }
 
 let sequence = []
@@ -98,6 +126,8 @@ function parseSequence() {
         }
         run.push(note.note)
     }
+    if(run.length > 0)
+        sequence.push(run)
 
     convertSequence()
 }
@@ -105,15 +135,29 @@ function parseSequence() {
 //add one to these notes to shift sharps upwards.
 const sharp = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]
 function convertSequence() {
+    order = []
     for (let run of sequence) {
+        if(run.length === 0)
+            continue
+
+        let flip = false;
+        if (isDescending(run)) {
+            flip = true;
+            run.reverse()
+        }
+
+        if (isAscending(run)) {
             run.forEach((value, index) => {
                 let i = run.length - index - 1
                 run[i] -= run[0]
-                run[i] += sharp[run[i] % 12]
+                run[i] += sharp[Math.abs(run[i] % 12)]
             })
+            mapTrunic(run, flip)
         }
+    }
 
-    mapTrunic()
+    generateImage()
+    outputGlyph()
 }
 
 const cons_to_trunic = {
@@ -162,23 +206,28 @@ const vowel_to_trunic = {
     0b01011: 30, // i:
     0b01101: 31, // oʊ
 }
-function mapTrunic() {
-    order = []
-    for (let run of sequence) {
-        if(isAscending(run)) {
-            let convert = [0,2,4,7,9,12,14,16,19,21,24]
-            let tuneic = 0
-            for (let number of run) {
-                if(convert.indexOf(number) >= 0) {
-                    tuneic += Math.pow(2,convert.indexOf(number))
-                }
-            }
-            let cons =   cons_to_trunic[tuneic & 0b111111] << 5 ?? 0
-            let vowel = vowel_to_trunic[tuneic >> 6] ?? 0
-            order.push(Glyph.createFromRaw(cons + vowel, false))
+function mapTrunic(run, flip) {
+    let convert = [0,2,4,7,9,12,14,16,19,21,24]
+    let tuneic = 0
+    for (let number of run) {
+        if(convert.indexOf(number) >= 0) {
+            tuneic += Math.pow(2,convert.indexOf(number))
         }
     }
-    generateImage()
+    let cons =   cons_to_trunic[tuneic & 0b111111] << 5 ?? 0
+    let vowel = vowel_to_trunic[tuneic >> 6] ?? 0
+    order.push(Glyph.createFromRaw(cons + vowel, flip))
+
+}
+
+function outputGlyph() {
+    let out = document.getElementById('phoneme-output')
+    out.innerText = '';
+    let text = ""
+    for (let glyph of order) {
+        text += glyph.getPhonemes() + " "
+    }
+    out.innerText = text;
 }
 
 function isAscending(array) {
