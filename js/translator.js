@@ -78,7 +78,7 @@ function glyphClick(event) {
 
     glyph.update()
 
-    document.getElementById('human-out').innerText = getENG()
+    document.getElementById('eng-out').innerText = getENG()
 }
 
 function saveImage() {

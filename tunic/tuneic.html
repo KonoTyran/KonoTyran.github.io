@@ -23,7 +23,7 @@
 <main class="main-content">
     <header>
         <h1>Tuneic Musical Translator (WIP)</h1>
-        <ul class="info">
+        <ul>
             <li>left click: add/move note</li>
             <li>right click: remove note</li>
             <li>middle click: play note</li>
@@ -41,15 +41,34 @@
         </div>
         <div id="note-container"></div>
     </div>
-    <p class="info">
-        <output id="phonetic-out"></output>
-        <br>
-        <output id="eng-out"></output>
-    </p>
-    <canvas id="image-out"></canvas>
-    <div class="controls" id="image-controls">
-        <button id="btn-save-image">save image</button> <button id="btn-copy-image">copy to clipboard</button>
+    <div class="info">
+        <div class="output-box">
+            <header>Phoneme Translation</header>
+            <div class="output-box-text">
+                <output id="phonetic-out">
+
+                </output>
+            </div>
+        </div>
+        <div class="output-box">
+            <header>Human Readable</header>
+            <div class="output-box-text">
+                <output id="eng-out">
+
+                </output>
+            </div>
+        </div>
+        <div class="output-box full">
+            <header>Image</header>
+            <div class="output-box-text">
+                <canvas id="image-out"></canvas>
+                <div class="controls" id="image-controls">
+                    <button id="btn-save-image">save image</button> <button id="btn-copy-image">copy to clipboard</button>
+                </div>
+            </div>
+        </div>
     </div>
+
     <footer class="footer">by <a href="https://github.com/KonoTyran/">KonoTyran</a></footer>
 </main>
 </body>
