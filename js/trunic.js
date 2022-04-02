@@ -1,5 +1,5 @@
 window.onload = () => {
-    document.getElementById("go").addEventListener('click', (e) => {
+    document.getElementById("go").addEventListener('click', () => {
         convertTextToTrunic()
         drawTrunic()
     });
@@ -9,8 +9,8 @@ window.onload = () => {
     document.getElementById('btn-copy-image').addEventListener('click', copyImage)
 
     loadJSON("/resources/dictionary.json",saveJSONDict)
-    document.getElementById('text-input').addEventListener('keydown', (e) => {
-        if(e.code === "Enter" || e.code === "NumpadEnter") {
+    document.getElementById('text-input').addEventListener('keydown', (event) => {
+        if(event.code === "Enter" || event.code === "NumpadEnter") {
             convertTextToTrunic()
             drawTrunic()
         }
@@ -39,11 +39,11 @@ function saveJSONDict(json){
 
 function loadJSON(file, callback) {
 
-    var xobj = new XMLHttpRequest();
+    let xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/json");
     xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
     xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == "200") {
+        if (xobj.readyState === 4 && xobj.status === 200) {
             // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
             callback(xobj.responseText);
         }

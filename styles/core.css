@@ -28,7 +28,7 @@
 .navbar-container{
     background: rgb(53, 79, 95);
     margin: 0;
-    font-size: .6em;
+    font-size: 20px;
 }
 
 .list a {
@@ -107,7 +107,7 @@ h1 {
     background: var(--unselected-color);
     color: #cecece;
     padding: .5em 1em;
-    margin: 5px 0px;
+    margin: 5px 0;
     cursor: pointer;
     position: relative;
     border-radius: .3em;

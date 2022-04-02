@@ -4,11 +4,7 @@ window.onload = function () {
 
     document.getElementById('btn-add-space').addEventListener('click', addSpace);
 
-    document.getElementById('btn-reset').addEventListener('click', function (event) {
-        consonants = {}
-        vowels = {}
-        reverse = {}
-        glyph_number = 0;
+    document.getElementById('btn-reset').addEventListener('click', function () {
         order = []
 
         document.getElementById('container').innerHTML = "";
@@ -17,20 +13,7 @@ window.onload = function () {
         document.getElementById('image-out').classList.toggle("hidden", true)
     })
 
-    document.getElementById('btn-speak').addEventListener('click', function (event) {
-        let speech = new SpeechSynthesisUtterance();
-
-        let outString = getENG();
-
-        speech.lang = "en-US";
-
-        speech.text = outString
-        speech.volume = 1;
-        speech.rate = 1;
-        speech.pitch = 1;
-
-        window.speechSynthesis.speak(speech);
-    })
+    document.getElementById('btn-speak').addEventListener('click', speakOutput)
 
     document.getElementById('btn-generate-image').addEventListener('click', generateImage)
 
@@ -48,15 +31,15 @@ function glyphClick(event) {
     if (glyph == null )
         return;
 
-    let id = glyph.getAttribute("id").substring(5);
+    let id = parseInt(glyph.getAttribute("id").substring(5));
 
     if(event.altKey) {
         glyph.remove()
-        order = order.filter(glyph => glyph.id != id)
+        order = order.filter(glyph => glyph.id !== id)
         return;
     }
 
-    glyph = order.filter(g => g.id == id).shift();
+    glyph = order.filter(g => g.id === id).shift();
 
     if(glyph.space)
         return;

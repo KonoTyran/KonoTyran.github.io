@@ -3,11 +3,7 @@ window.onload = function () {
         addGlyph();
     }
 
-    document.getElementById('btn-reset').addEventListener('click', function (event) {
-        vowels = []
-        consonants = []
-        reverse = []
-        glyph_number = -1;
+    document.getElementById('btn-reset').addEventListener('click', function () {
         order = [];
         step = 0;
         sequence = "";
@@ -20,20 +16,7 @@ window.onload = function () {
         document.getElementById('sequence-out').innerText = "";
     })
 
-    document.getElementById('btn-speak').addEventListener('click', function (event) {
-        let speech = new SpeechSynthesisUtterance();
-
-        let outString = getENG();
-
-        speech.lang = "en-US";
-
-        speech.text = outString
-        speech.volume = 1;
-        speech.rate = 1;
-        speech.pitch = 1;
-
-        window.speechSynthesis.speak(speech);
-    })
+    document.getElementById('btn-speak').addEventListener('click', speakOutput)
 
     updateAllGlyphs()
     document.getElementById('human-out').innerText = getENG()

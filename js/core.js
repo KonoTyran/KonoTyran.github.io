@@ -476,3 +476,18 @@ function generateImage() {
         pos += glyph.space ? 25 : 40;
     }
 }
+
+function speakOutput() {
+    let speech = new SpeechSynthesisUtterance();
+
+    let outString = getENG();
+
+    speech.lang = "en-US";
+
+    speech.text = outString
+    speech.volume = 1;
+    speech.rate = 1;
+    speech.pitch = 1;
+
+    window.speechSynthesis.speak(speech);
+}

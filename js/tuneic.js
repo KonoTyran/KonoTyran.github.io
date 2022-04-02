@@ -1,5 +1,4 @@
 class Note {
-    static musicScale = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     static musicScaleR = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"].reverse()
 
     constructor(note = -1){
@@ -246,7 +245,7 @@ function isDescending(array) {
 }
 
 //if you have another AudioContext class use that one, as some browsers have a limit
-let audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
+let audioCtx = new window.AudioContext;
 
 //All arguments are optional:
 
@@ -271,4 +270,4 @@ function beep(duration, frequency, volume, type, callback) {
     oscillator.stop(stopTime);
     gainNode.gain.setTargetAtTime(0, stopTime - 0.25, .25);
 
-};
+}
