@@ -32,9 +32,15 @@ function saveImage() {
 
 function saveJSONDict(json){
     dict = JSON.parse(json);
+
+    reverseDict = {};
+    for (const [key, value] of Object.entries(dict)) {
+        reverseDict[value] = key;
+    }
+
     let button = document.getElementById("go")
-    button.removeAttribute("disabled")
-    button.innerText = "Trunicafy"
+//    button.removeAttribute("disabled")
+//    button.innerText = "Trunicafy"
 }
 
 function loadJSON(file, callback) {
@@ -159,5 +165,6 @@ function drawTrunic() {
     document.getElementById("image-controls").classList.toggle("hidden", false)
 }
 
-let lastPhrase = ""
-let dict = {}
+let lastPhrase = "";
+let dict = {};
+let reverseDict = {};

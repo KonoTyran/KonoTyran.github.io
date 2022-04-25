@@ -276,10 +276,55 @@ function updateAllGlyphs() {
 }
 
 function getENG(){
-    let text = "";
-    for(let glyph of order) {
-        text += glyph.getENG()
+
+    // TODO remove this
+    loadJSON("/resources/dictionary.json",saveJSONDict)
+
+    // regroup glyphs per word aka glyph-word
+    let gwords = [];
+    let gword = [];
+    for(glyph of order) {
+        if(glyph.space) {
+            if(gword) gwords.push(gword);
+            let gword = [];
+        } else {
+            gword.push(glyph);
+        }
     }
+    if(gword) gwords.push(gword);
+
+    let ewords = [];
+    for(gword of gwords) {
+
+        // glyph-word into phoneme-word
+        // TODO use map/reduce/join whatever instead
+        let pword = "";
+        for(glyph of gword) {
+            pword += glyph.getPhonemes();
+        }
+        console.log();
+        console.log(pword);
+        console.log(dict["the(2)"]);
+        console.log(reverseDict[dict["the(2)"]]);
+        console.log(reverseDict[pword]);
+
+        // phoneme-word exists in dict ?
+        if (reverseDict[pword]) {
+            ewords.push(reverseDict[pword]);
+        } else {
+            // fallback in case of spelling errors
+            // translate phoneme by phoneme
+            // TODO use map/reduce/join whatever instead
+            let eword = "";
+            for(glyph of gword) {
+                eword += glyph.getENG();
+            }
+
+            ewords.push(eword);
+        }
+    }
+
+    let text = ewords.join(" ");
     return text;
 }
 
