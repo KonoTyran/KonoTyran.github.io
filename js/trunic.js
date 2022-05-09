@@ -18,6 +18,7 @@ window.onload = () => {
         if(event.code === "Enter" || event.code === "NumpadEnter") {
             convertTextToTrunic()
             drawTrunic()
+            generateAudio()
         }
     })
 }
