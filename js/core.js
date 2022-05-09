@@ -628,6 +628,9 @@ function generateAudio() {
         let blob = new Blob([wav], {type: "audio/wav"});
         audioOut.src = URL.createObjectURL(blob);
     });
+
+    document.getElementById("audio-out").classList.toggle("hidden", false);
+    document.getElementById("audio-controls").classList.toggle("hidden", false);
 }
 
 function fairyBeep(ctx, output, startTime, duration = 0.5, frequency = 440, volume = 0.2) {
