@@ -103,6 +103,14 @@ class Glyph {
         return consonant_eng[this.consonant] ?? ""
     }
 
+    getVowelTuneic() {
+        return vowel_to_tuneic[this.vowel] ?? -1
+    }
+
+    getConsonantTuneic() {
+        return consonant_to_tuneic[this.consonant] ?? -1
+    }
+
     getENG() {
         if(this.space)
             return " ";
@@ -117,6 +125,24 @@ class Glyph {
         if(this.flipped)
             return this.getVowel() + this.getConsonant()
         return this.getConsonant() + this.getVowel()
+    }
+
+    getTuneic() {
+        let scale = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24];
+
+        let v = this.getVowelTuneic();
+        let c = this.getConsonantTuneic();
+        let tuneic = c + (v << 6);
+        if (this.space || tuneic < 2 || v == -1 || c == -1) {
+            return [-1]; // a rest
+        }
+
+        let run = scale.filter((_, i) => tuneic & (1 << i));
+        if (this.flipped) {
+            run.reverse();
+        }
+
+        return run;
     }
 
     static createFromRaw(rawNumber, flipped = false) {
@@ -283,6 +309,20 @@ function getENG(){
     return text;
 }
 
+function getTuneic() {
+    let notes = [];
+    for(let glyph of order) {
+        let run = glyph.getTuneic();
+
+        if (notes.length && notes[notes.length - 1] == run[0]) {
+            run.shift(); // remove duplicate notes
+        }
+
+        notes = notes.concat(run);
+    }
+    return notes;
+}
+
 let order = [];
 
 const vowel_lookup = {
@@ -327,6 +367,27 @@ const vowel_eng = {
     29: "err",
     30: "e",
     31: "oh"
+}
+const vowel_to_tuneic = {
+    0: 0b00000,
+    1: 0b00110,  // aɪ
+    2: 0b10101,  // eɪ
+    3: 0b01001,  // ə
+    6: 0b10110,  // ɒ
+    7: 0b11000,  // æ
+    8: 0b10001,  // ɔɪ
+    12: 0b00011, // ʊ
+    15: 0b11001, // u:
+    16: 0b00101, // aʊ
+    20: 0b11100, // eəʳ
+    22: 0b10100, // ɪəʳ
+    23: 0b00111, // ʊəʳ
+    24: 0b10010, // ɪ
+    27: 0b01010, // ɑ:
+    28: 0b01100, // ɛ
+    29: 0b01110, // ɜ:ʳ
+    30: 0b01011, // i:
+    31: 0b01101, // oʊ
 }
 
 const consonant_lookup = {
@@ -382,6 +443,33 @@ const consonant_eng = {
     58: "th",
     61: "sh",
     63: "ng"
+}
+const consonant_to_tuneic = {
+    0: 0b000001,
+    5: 0b101001,  // w
+    10: 0b001111, // dʒ
+    17: 0b110001, // p
+    18: 0b011001, // l
+    19: 0b100101, // ɹ
+    20: 0b100111, // tʃ
+    21: 0b010101, // t
+    22: 0b010111, // j
+    23: 0b000101, // θ
+    25: 0b010001, // f
+    27: 0b000011, // s
+    34: 0b100001, // b
+    35: 0b001101, // k
+    38: 0b110011, // v
+    40: 0b001001, // m
+    42: 0b001011, // d
+    44: 0b010011, // n
+    47: 0b111001, // ʒ - no source found yet, guess CGAC over CEAC
+    49: 0b101101, // g
+    50: 0b011011, // h
+    54: 0b011101, // z
+    58: 0b101011, // ð
+    61: 0b100011, // ʃ
+    63: 0b000111,  // ŋ
 }
 
 // noinspection NonAsciiCharacters,JSNonASCIINames
@@ -490,4 +578,116 @@ function speakOutput() {
     speech.pitch = 1;
 
     window.speechSynthesis.speak(speech);
+}
+
+function generateAudio() {
+    let notes = getTuneic();
+    let duration = 3 / 32;
+    let echoBeats = 20;
+
+    let offlineCtx = new window.OfflineAudioContext({
+        numberOfChannels: 1,
+        length: 48000 * duration * (notes.length + echoBeats),
+        sampleRate: 48000,
+    });
+    let noteOutput = offlineCtx.createGain();
+    noteOutput.connect(offlineCtx.destination);
+
+    // play notes
+    let baseOffset = 0;
+    for (let i = 0; i < notes.length; ++i) {
+        if (notes[i] == -1) {
+            // increase pitch per word, wrap around after an octave
+            baseOffset = (baseOffset + 1) % 13;
+            continue; // play a rest
+        }
+
+        let t = i * duration;
+        let baseFreq = 523.25; // C5 note
+        let freq = baseFreq * Math.pow(2, (notes[i] + baseOffset) / 12);
+        let volume = (notes[i] / 24) * 0.4 + 0.4;
+        fairyBeep(offlineCtx, noteOutput, t, duration, freq, volume);
+    }
+
+    // add echo
+    let wetGain = offlineCtx.createGain();
+    let echoDelay = offlineCtx.createDelay(duration * 2);
+    let echoGain = offlineCtx.createGain();
+    wetGain.gain.setValueAtTime(0.25, 0);
+    echoDelay.delayTime.setValueAtTime(duration * 2, 0);
+    echoGain.gain.setValueAtTime(-0.5, 0);
+    noteOutput.connect(wetGain);
+    wetGain.connect(echoDelay);
+    echoDelay.connect(echoGain);
+    echoGain.connect(echoDelay); // feedback
+    echoGain.connect(offlineCtx.destination);
+
+    const audioOut = document.getElementById('audio-out');
+    offlineCtx.startRendering().then(renderedBuffer => {
+        let wav = audioBufferToWav(renderedBuffer);
+        let blob = new Blob([wav], {type: "audio/wav"});
+        audioOut.src = URL.createObjectURL(blob);
+    });
+}
+
+function fairyBeep(ctx, output, startTime, duration = 0.5, frequency = 440, volume = 0.2) {
+    if (!startTime) startTime = ctx.currentTime;
+    let stopTime = startTime + duration;
+    let attackCurve = [0, 0.25, 0.5, 0.75, 1]
+        .map(x => 0.75 * x * (x - 1) + x)
+        .map(x => x * volume);
+
+    let oscillator = ctx.createOscillator();
+    let envelope = ctx.createGain();
+    oscillator.frequency.value = frequency;
+    envelope.gain.setValueCurveAtTime(attackCurve, startTime, duration * 0.9);
+    envelope.gain.setTargetAtTime(0, startTime + duration * 0.9, duration * 0.03);
+    oscillator.connect(envelope);
+    envelope.connect(output);
+
+    oscillator.start(startTime);
+}
+
+// adapted from https://github.com/Jam3/audiobuffer-to-wav/blob/master/index.js
+function audioBufferToWav(buffer) {
+    // helper function
+    function writeString(view, offset, string) {
+        for (var i = 0; i < string.length; i++) {
+            view.setUint8(offset + i, string.charCodeAt(i))
+        }
+    }
+
+    let numChannels = 1;
+    let sampleRate = buffer.sampleRate;
+    let format = 3; // IEEE float format
+    let bitDepth = 32;
+    let bufferData = buffer.getChannelData(0);
+
+    let bytesPerSample = bitDepth / 8;
+    let blockAlign = numChannels * bytesPerSample;
+
+    let wavBuffer = new ArrayBuffer(44 + bufferData.length * bytesPerSample);
+    let wavHeader = new DataView(wavBuffer, 0, 44);
+    let wavData = new DataView(wavBuffer, 44, bufferData.length * bytesPerSample);
+
+    writeString(wavHeader, 0, 'RIFF'); // RIFF identifier
+    wavHeader.setUint32(4, 36 + bufferData.length * bytesPerSample, true); // RIFF chunk length
+    writeString(wavHeader, 8, 'WAVE'); // RIFF type
+
+    writeString(wavHeader, 12, 'fmt '); // format chunk identifier
+    wavHeader.setUint32(16, 16, true); // format chunk length
+    wavHeader.setUint16(20, format, true); // sample format
+    wavHeader.setUint16(22, numChannels, true); // channel count
+    wavHeader.setUint32(24, sampleRate, true); // sample rate
+    wavHeader.setUint32(28, sampleRate * blockAlign, true); // byte rate
+    wavHeader.setUint16(32, blockAlign, true); // block align
+    wavHeader.setUint16(34, bitDepth, true); // bits per sample
+
+    writeString(wavHeader, 36, 'data'); // data chunk identifier
+    wavHeader.setUint32(40, bufferData.length * bytesPerSample, true); // data chunk length
+    for (var i = 0; i < bufferData.length; i++) {
+        wavData.setFloat32(i * 4, bufferData[i], true);
+    }
+
+    return wavBuffer;
 }
