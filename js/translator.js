@@ -17,9 +17,15 @@ window.onload = function () {
 
     document.getElementById('btn-generate-image').addEventListener('click', generateImage)
 
+    document.getElementById('btn-generate-audio').addEventListener('click', generateAudio)
+
     document.getElementById('btn-save-image').addEventListener('click', saveImage)
 
     document.getElementById('btn-copy-image').addEventListener('click', copyImage)
+
+    document.getElementById('btn-save-audio').addEventListener('click', saveAudio)
+
+    document.getElementById('audio-out').volume = 0.2;
 }
 
 document.addEventListener('click', glyphClick);
@@ -75,4 +81,16 @@ function saveImage() {
 
 function copyImage() {
     document.getElementById('image-out').toBlob(blob => navigator.clipboard.write([new ClipboardItem({'image/png':blob})]))
+}
+
+function saveAudio() {
+    const link = document.createElement('a')
+    const audio = document.getElementById('audio-out')
+
+    let href = audio.src;
+    if (!href.length) return; // no source
+    link.download = 'melody.wav'
+    link.href = href;
+    link.click()
+    link.remove()
 }

@@ -2,17 +2,23 @@ window.onload = () => {
     document.getElementById("go").addEventListener('click', () => {
         convertTextToTrunic()
         drawTrunic()
+        generateAudio()
     });
 
     document.getElementById('btn-save-image').addEventListener('click', saveImage)
 
     document.getElementById('btn-copy-image').addEventListener('click', copyImage)
 
+    document.getElementById('btn-save-audio').addEventListener('click', saveAudio)
+
+    document.getElementById('audio-out').volume = 0.2;
+
     loadJSON("/resources/dictionary.json",saveJSONDict)
     document.getElementById('text-input').addEventListener('keydown', (event) => {
         if(event.code === "Enter" || event.code === "NumpadEnter") {
             convertTextToTrunic()
             drawTrunic()
+            generateAudio()
         }
     })
 }
@@ -26,6 +32,18 @@ function saveImage() {
     const canvas = document.getElementById('image-out')
     link.download = lastPhrase
     link.href = canvas.toDataURL();
+    link.click()
+    link.remove()
+}
+
+function saveAudio() {
+    const link = document.createElement('a')
+    const audio = document.getElementById('audio-out')
+
+    let href = audio.src;
+    if (!href.length) return; // no source
+    link.download = 'melody.wav'
+    link.href = href;
     link.click()
     link.remove()
 }
