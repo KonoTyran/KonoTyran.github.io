@@ -463,7 +463,7 @@ const consonant_to_tuneic = {
     40: 0b001001, // m
     42: 0b001011, // d
     44: 0b010011, // n
-    47: 0b111001, // ʒ - no source found yet, guess CGAC over CEAC
+    47: 0b110101, // ʒ
     49: 0b101101, // g
     50: 0b011011, // h
     54: 0b011101, // z
